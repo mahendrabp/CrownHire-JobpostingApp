@@ -11,6 +11,7 @@ import {
 import {Button, Input, Layout} from 'react-native-ui-kitten';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
+import {WaveIndicator} from 'react-native-indicators';
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class LoginScreen extends Component {
       password: '',
       isEmailValid: true,
       invalidMessage: '',
-      isLoading: '',
+      isLoading: false,
     };
   }
 
@@ -55,27 +56,56 @@ class LoginScreen extends Component {
       email,
       password,
     };
-    axios
-      .post(url, payload)
-      .then(response => {
-        console.log(response);
-        AsyncStorage.setItem('token', response.data.token);
-        this.props.navigation.navigate('Home');
-      })
-      .catch(error => {
-        console.log(error);
-        this.setState({isLoading: false});
-        ToastAndroid.showWithGravityAndOffset(
-          'Invalid Username/Password!',
-          ToastAndroid.LONG,
-          ToastAndroid.BOTTOM,
-          25,
-          50,
-        );
-      });
+
+    setTimeout(async () => {
+      axios
+        .post(url, payload)
+        .then(response => {
+          if (response.data.status == 500 || response.data.status == 400) {
+            ToastAndroid.show(
+              response.data.message,
+              ToastAndroid.LONG,
+              ToastAndroid.BOTTOM,
+            );
+            this.setState({
+              isLoading: false,
+            });
+          }
+
+          if (response.data.status == 200) {
+            console.log(response);
+            AsyncStorage.setItem('token', response.data.token);
+            this.props.navigation.navigate('Home');
+            this.setState({
+              isLoading: false,
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          this.setState({isLoading: false});
+          ToastAndroid.showWithGravityAndOffset(
+            'Invalid Username/Password!',
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
+        });
+    }, 1000);
   };
 
-  _renderButtonSubbmit = () => {};
+  _renderBtnSignIn = () => {
+    if (this.state.isLoading == true) {
+      return <WaveIndicator color="#f24f71" />;
+    } else {
+      return (
+        <Button style={styles.button} status="danger" onPress={this.onSignIn}>
+          SIGN IN
+        </Button>
+      );
+    }
+  };
 
   render() {
     return (
@@ -102,13 +132,7 @@ class LoginScreen extends Component {
               placeholder="Password"
               secureTextEntry={true}
             />
-            <Button
-              type="submit"
-              style={styles.button}
-              status="primary"
-              onPress={this.onSignIn}>
-              MASUK
-            </Button>
+            {this._renderBtnSignIn()}
             <View
               style={{
                 flexDirection: 'row',
