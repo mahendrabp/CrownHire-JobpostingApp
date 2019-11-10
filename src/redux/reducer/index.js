@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import todo from './todo';
+import auth from './auth';
 
 const appReducer = combineReducers({
   auth,
