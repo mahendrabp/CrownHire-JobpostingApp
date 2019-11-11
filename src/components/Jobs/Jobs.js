@@ -194,6 +194,8 @@ class Jobs extends Component {
                     <CardItem>
                       <Body>
                         <Text>{item.job}</Text>
+                        <Text>{item.location}</Text>
+                        <Text>{item.salary}</Text>
                       </Body>
                     </CardItem>
                   </Card>

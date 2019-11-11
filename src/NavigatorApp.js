@@ -5,16 +5,18 @@ import RegisterScreen from './screens/RegisterScreen';
 import HomeScreen from './screens/HomeScreen';
 import Jobs from './components/Jobs/Jobs';
 import EditJobScreen from './screens/Jobs/EditJobScreen';
+import WelcomeScreen from './screens/WelcomeScreen';
 
 const MainNavigator = createStackNavigator({
   Jobs: {
     screen: Jobs,
   },
-  Home: {
-    screen: HomeScreen,
-  },
   Login: {
     screen: LoginScreen,
+  },
+
+  Home: {
+    screen: HomeScreen,
   },
 
   Register: {

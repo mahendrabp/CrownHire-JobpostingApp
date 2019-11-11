@@ -4,14 +4,15 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  Text,
   TouchableOpacity,
   ToastAndroid,
+  Image,
 } from 'react-native';
-import {Button, Input, Layout} from 'react-native-ui-kitten';
+import {Button, Input, Layout, Icon, Text} from 'react-native-ui-kitten';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import {WaveIndicator} from 'react-native-indicators';
+import imageLogin from '../assets/characterLogin.png';
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -22,6 +23,8 @@ class LoginScreen extends Component {
       isEmailValid: true,
       invalidMessage: '',
       isLoading: false,
+      value: '',
+      secureTextEntry: true,
     };
   }
 
@@ -51,7 +54,7 @@ class LoginScreen extends Component {
   onSignIn = () => {
     this.setState({isLoading: true});
     const {email, password} = this.state;
-    const url = 'http://10.0.2.2:5200/api/v1/users/login/';
+    const url = 'http://10.0.2.2:5200/api/v1/users/login';
     const payload = {
       email,
       password,
@@ -61,6 +64,7 @@ class LoginScreen extends Component {
       await axios
         .post(url, payload)
         .then(response => {
+          console.log(response);
           if (response.data.status == 500 || response.data.status == 400) {
             ToastAndroid.show(
               response.data.message,
@@ -71,7 +75,7 @@ class LoginScreen extends Component {
               isLoading: false,
             });
           }
-
+          console.log(response);
           if (response.data.status == 200) {
             console.log(response);
             AsyncStorage.setItem('token', response.data.token);
@@ -97,18 +101,35 @@ class LoginScreen extends Component {
 
   _renderBtnSignIn = () => {
     if (this.state.isLoading == true) {
-      return <WaveIndicator color="#B894FF" />;
+      return <WaveIndicator color="#3C82FF" />;
     } else {
       return (
+        // <Button
+        //   style={styles.button}
+        //   appearance="outline"
+        //   status="primary"
+        //   onPress={this.onSignIn}>
+        //   MASUK
+        // </Button>
         <Button
           style={styles.button}
-          appearance="outline"
           status="primary"
+          icon={StarIcon}
           onPress={this.onSignIn}>
           MASUK
         </Button>
       );
     }
+  };
+
+  _renderIcon = style => {
+    const iconName = this.state.secureTextEntry ? 'eye-off' : 'eye';
+    return <Icon {...style} name={iconName} />;
+  };
+
+  onIconPress = () => {
+    const secureTextEntry = !this.state.secureTextEntry;
+    this.setState({secureTextEntry});
   };
 
   render() {
@@ -117,37 +138,63 @@ class LoginScreen extends Component {
         <View style={styles.container}>
           <ScrollView style={styles.containerScrollView}>
             <View>
-              <Text style={styles.title}>CROWNHIRE</Text>
-            </View>
-            <Input
-              size="small"
-              // style={styles.input}
-              value={this.state.email}
-              onChangeText={value => this.onChangeEmail(value)}
-              placeholder="Email"
-              status={this.state.isEmailValid ? '' : 'danger'}
-              caption={this.state.isEmailValid ? '' : this.state.invalidMessage}
-            />
-            <Input
-              size="small"
-              // style={styles.input}
-              value={this.state.password}
-              onChangeText={value => this.onChangePassword(value)}
-              placeholder="Password"
-              secureTextEntry={true}
-            />
-            {this._renderBtnSignIn()}
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: 18,
-                justifyContent: 'center',
-              }}>
-              <Text>Belum punya akun ? </Text>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Register')}>
-                <Text style={styles.textPurple}>Register here.</Text>
-              </TouchableOpacity>
+              <View style={{alignItems: 'center'}}>
+                <Text category="h4" style={styles.title}>
+                  MASUK
+                </Text>
+              </View>
+              <View
+                style={{
+                  borderRadius: 10,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                }}>
+                <Image source={imageLogin} />
+              </View>
+              <Input
+                size="small"
+                icon={EmailIcon}
+                // style={styles.input}
+                value={this.state.email}
+                onChangeText={value => this.onChangeEmail(value)}
+                placeholder="Email"
+                status={this.state.isEmailValid ? '' : 'danger'}
+                caption={
+                  this.state.isEmailValid ? '' : this.state.invalidMessage
+                }
+              />
+              {/* <Input
+                size="small"
+                // style={styles.input}
+                icon={this.renderIcon}
+                value={this.state.password}
+                onChangeText={value => this.onChangePassword(value)}
+                placeholder="Password"
+                secureTextEntry={true}
+              /> */}
+              <Input
+                size="small"
+                value={this.state.password}
+                placeholder="Password"
+                icon={this._renderIcon}
+                secureTextEntry={this.state.secureTextEntry}
+                onIconPress={this.onIconPress}
+                onChangeText={value => this.onChangePassword(value)}
+              />
+              {this._renderBtnSignIn()}
+              <View
+                style={{
+                  marginTop: 18,
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                }}>
+                <Text>Belum punya akun ? </Text>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Register')}>
+                  <Text style={styles.textPurple}>Daftar Disini.</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </ScrollView>
         </View>
@@ -155,6 +202,9 @@ class LoginScreen extends Component {
     );
   }
 }
+
+const StarIcon = style => <Icon {...style} name="log-in-outline" />;
+const EmailIcon = style => <Icon {...style} name="email" />;
 
 const styles = StyleSheet.create({
   container: {
@@ -168,6 +218,8 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     color: '#4a4a4a',
     fontFamily: 'Montserrat-Bold',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   button: {
     marginVertical: 4,
@@ -181,7 +233,7 @@ const styles = StyleSheet.create({
     color: '#f5365c',
   },
   textPurple: {
-    color: '#B894FF',
+    color: '#3C82FF',
   },
 });
 

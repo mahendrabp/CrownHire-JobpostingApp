@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   ScrollView,
   ToastAndroid,
+  Image,
 } from 'react-native';
-import {Button, Text, Input} from 'react-native-ui-kitten';
+import {Button, Text, Input, Icon} from 'react-native-ui-kitten';
 import {WaveIndicator} from 'react-native-indicators';
 import axios from 'axios';
+import imageRegist from '../assets/characterRegist.png';
 
 class RegisterScreen extends Component {
   constructor(props) {
@@ -20,6 +22,8 @@ class RegisterScreen extends Component {
       retypePassword: '',
       isEmailValid: true,
       isPasswordValid: true,
+      value: '',
+      secureTextEntry: true,
     };
   }
 
@@ -125,48 +129,75 @@ class RegisterScreen extends Component {
     }
   };
 
+  _renderIcon = style => {
+    const iconName = this.state.secureTextEntry ? 'eye-off' : 'eye';
+    return <Icon {...style} name={iconName} />;
+  };
+
+  onIconPress = () => {
+    const secureTextEntry = !this.state.secureTextEntry;
+    this.setState({secureTextEntry});
+  };
+
   render() {
     return (
       <>
         <View style={styles.container}>
           <ScrollView style={styles.scrollView}>
             <View>
-              <Text category="h5" style={styles.title}>
-                INI REGISTER SCREEN
-              </Text>
-            </View>
-            <Input
-              size="small"
-              style={styles.input}
-              value={this.state.email}
-              onChangeText={value => this.onChangeEmail(value)}
-              placeholder="Email"
-              status={this.state.isEmailValid ? '' : 'danger'}
-              caption={this.state.isEmailValid ? '' : 'Email invalid'}
-            />
-            <Input
-              size="small"
-              style={styles.input}
-              value={this.state.password}
-              onChangeText={value => this.onChangePassword(value)}
-              placeholder="Password"
-              secureTextEntry
-            />
+              <View style={{alignItems: 'center'}}>
+                <Text category="h5" style={styles.title}>
+                  DAFTAR
+                </Text>
+              </View>
+              <View
+                style={{
+                  borderRadius: 10,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                }}>
+                <Image source={imageRegist} />
+              </View>
+              <Input
+                size="small"
+                style={styles.input}
+                value={this.state.email}
+                onChangeText={value => this.onChangeEmail(value)}
+                placeholder="Email"
+                status={this.state.isEmailValid ? '' : 'danger'}
+                caption={this.state.isEmailValid ? '' : 'Email invalid'}
+                icon={EmailIcon}
+              />
+              <Input
+                size="small"
+                style={styles.input}
+                value={this.state.password}
+                onChangeText={value => this.onChangePassword(value)}
+                placeholder="Password"
+                icon={this._renderIcon}
+                secureTextEntry={this.state.secureTextEntry}
+                onIconPress={this.onIconPress}
+              />
 
-            {/* <Button
+              {/* <Button
               style={styles.button}
               appearance="outline"
               status="primary"
               onPress={this.onSignUp}>
               DAFTAR
             </Button> */}
-            {this._renderBtnSignUp()}
+              {this._renderBtnSignUp()}
+            </View>
           </ScrollView>
         </View>
       </>
     );
   }
 }
+
+const StarIcon = style => <Icon {...style} name="log-in-outline" />;
+const EmailIcon = style => <Icon {...style} name="email" />;
 
 const styles = StyleSheet.create({
   container: {
@@ -193,6 +224,8 @@ const styles = StyleSheet.create({
     marginBottom: 18,
     color: '#4a4a4a',
     fontFamily: 'Montserrat-Bold',
+    alignContent: 'center',
+    alignItems: 'center',
   },
   textDanger: {
     color: '#f5365c',
