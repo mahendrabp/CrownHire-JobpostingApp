@@ -27,6 +27,7 @@ import {Provider} from 'react-redux';
 import Store from './src/redux/store';
 import NavigatorApp from './src/NavigatorApp';
 import {mapping, light as lightTheme} from '@eva-design/eva';
+import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {
   ApplicationProvider,
   Layout,
@@ -39,6 +40,7 @@ class App extends Component {
       <>
         {/* <StatusBar barStyle="dark-content" /> */}
         {/* <Provider store={Store}> */}
+        <IconRegistry icons={EvaIconsPack} />
         <ApplicationProvider mapping={mapping} theme={lightTheme}>
           <NavigatorApp />
         </ApplicationProvider>

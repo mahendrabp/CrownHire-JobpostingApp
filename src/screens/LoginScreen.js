@@ -58,7 +58,7 @@ class LoginScreen extends Component {
     };
 
     setTimeout(async () => {
-      axios
+      await axios
         .post(url, payload)
         .then(response => {
           if (response.data.status == 500 || response.data.status == 400) {
@@ -97,11 +97,15 @@ class LoginScreen extends Component {
 
   _renderBtnSignIn = () => {
     if (this.state.isLoading == true) {
-      return <WaveIndicator color="#f24f71" />;
+      return <WaveIndicator color="#B894FF" />;
     } else {
       return (
-        <Button style={styles.button} status="danger" onPress={this.onSignIn}>
-          SIGN IN
+        <Button
+          style={styles.button}
+          appearance="outline"
+          status="primary"
+          onPress={this.onSignIn}>
+          MASUK
         </Button>
       );
     }
@@ -142,7 +146,7 @@ class LoginScreen extends Component {
               <Text>Belum punya akun ? </Text>
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Register')}>
-                <Text style={styles.textDanger}>Register here.</Text>
+                <Text style={styles.textPurple}>Register here.</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -175,6 +179,9 @@ const styles = StyleSheet.create({
   },
   textDanger: {
     color: '#f5365c',
+  },
+  textPurple: {
+    color: '#B894FF',
   },
 });
 

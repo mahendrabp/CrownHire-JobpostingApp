@@ -5,8 +5,11 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
 import {Button, Text, Input} from 'react-native-ui-kitten';
+import {WaveIndicator} from 'react-native-indicators';
+import axios from 'axios';
 
 class RegisterScreen extends Component {
   constructor(props) {
@@ -21,18 +24,104 @@ class RegisterScreen extends Component {
   }
 
   onChangeEmail = value => {
-    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    let validationRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-    if (reg.test(value) === false) {
+    if (validationRegex.test(value) === false) {
       this.setState({
         email: value,
         isEmailValid: false,
+        invalidMessage: 'email tidak valid',
       });
     } else {
       this.setState({
         email: value,
         isEmailValid: true,
       });
+    }
+  };
+
+  onChangePassword = value => {
+    this.setState({password: value});
+  };
+
+  onSignUp = () => {
+    this.setState({isLoading: true});
+    const {email, password} = this.state;
+    const url = 'http://10.0.2.2:5200/api/v1/users/register';
+    const payload = {
+      email,
+      password,
+    };
+
+    setTimeout(() => {
+      axios
+        .post(url, payload)
+        .then(response => {
+          console.log(response);
+          if (response.data.status == 500 || response.data.status == 400) {
+            ToastAndroid.show(
+              response.data.message,
+              ToastAndroid.LONG,
+              ToastAndroid.BOTTOM,
+            );
+            this.setState({
+              isLoading: false,
+            });
+          }
+
+          if (response.data.status == 200) {
+            console.log(response);
+            // AsyncStorage.setItem('token', response.data.token);
+            this.props.navigation.navigate('Login');
+            this.setState({
+              isLoading: false,
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error.message);
+          this.setState({isLoading: false});
+          ToastAndroid.showWithGravityAndOffset(
+            'Invalid Username/Password!',
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50,
+          );
+        });
+    }, 1000);
+  };
+
+  // onSignUp = () => {
+  //   this.setState({isLoading: true});
+  //   const {email, password} = this.state;
+  //   const url = 'http://10.0.2.2:5200/api/v1/users/register';
+  //   const payload = {
+  //     email,
+  //     password,
+  //   };
+
+  //   axios
+  //     .post(url, payload)
+  //     .then(response => {
+  //       console.log(response);
+  //     })
+  //     .catch();
+  // };
+
+  _renderBtnSignUp = () => {
+    if (this.state.isLoading == true) {
+      return <WaveIndicator color="#B894FF" />;
+    } else {
+      return (
+        <Button
+          style={styles.button}
+          appearance="outline"
+          status="primary"
+          onPress={this.onSignUp}>
+          DAFTAR
+        </Button>
+      );
     }
   };
 
@@ -59,19 +148,19 @@ class RegisterScreen extends Component {
               size="small"
               style={styles.input}
               value={this.state.password}
-              onChangeText={this.onChangeText}
+              onChangeText={value => this.onChangePassword(value)}
               placeholder="Password"
+              secureTextEntry
             />
-            <Input
-              size="small"
-              style={styles.input}
-              value={this.state.retypePassword}
-              onChangeText={this.onChangeText}
-              placeholder="Retype Password"
-            />
-            <Button style={styles.button} status="danger">
-              REGISTER
-            </Button>
+
+            {/* <Button
+              style={styles.button}
+              appearance="outline"
+              status="primary"
+              onPress={this.onSignUp}>
+              DAFTAR
+            </Button> */}
+            {this._renderBtnSignUp()}
           </ScrollView>
         </View>
       </>

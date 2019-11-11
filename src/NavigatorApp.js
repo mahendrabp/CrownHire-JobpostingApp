@@ -5,12 +5,13 @@ import RegisterScreen from './screens/RegisterScreen';
 import HomeScreen from './screens/HomeScreen';
 
 const MainNavigator = createStackNavigator({
-  Login: {
-    screen: LoginScreen,
-  },
   Home: {
     screen: HomeScreen,
   },
+  Login: {
+    screen: LoginScreen,
+  },
+
   Register: {
     screen: RegisterScreen,
   },
