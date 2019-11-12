@@ -330,7 +330,7 @@ class Jobs extends Component {
         <FAB
           buttonColor="#409BF6"
           iconTextColor="#FFFFFF"
-          // onClickAction={() => this.props.navigation.navigate('AddScreen')}
+          onClickAction={() => this.props.navigation.navigate('AddJobScreen')}
           visible={true}
           iconTextComponent={
             <Icon name="plus-outline" width={30} height={30} fill="#fff" />

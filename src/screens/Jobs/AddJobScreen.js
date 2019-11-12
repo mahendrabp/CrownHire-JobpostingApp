@@ -59,17 +59,6 @@ class AddJobScreen extends Component {
     const current_category = this.state.categories.find(
       category => category.id === navigation.getParam('category_id'),
     );
-
-    this.setState({
-      id: navigation.getParam('id'),
-      name: navigation.getParam('job'),
-      description: navigation.getParam('description'),
-      salary: navigation.getParam('salary'),
-      location: navigation.getParam('location'),
-      category_id: navigation.getParam('category_id'),
-      company_id: navigation.getParam('company_id'),
-      category: navigation.getParam('category'),
-    });
   }
 
   // async getCategory() {
@@ -89,7 +78,7 @@ class AddJobScreen extends Component {
   //     });
   // }
 
-  async updateProduct() {
+  async addJob() {
     const {
       name,
       description,
@@ -115,7 +104,7 @@ class AddJobScreen extends Component {
     console.log(name, description, category_id);
 
     await axios
-      .patch(`http://10.0.2.2:5200/api/v1/jobs/${this.state.id}`, formData)
+      .post(`http://10.0.2.2:5200/api/v1/jobs/`, formData)
 
       .then(res => {
         console.log(res.data.status);
@@ -218,13 +207,13 @@ class AddJobScreen extends Component {
             /> */}
             <View style={styles.card}>
               <Text category="h6" style={styles.cardTitle}>
-                Edit Jobs
+                Add Jobs
               </Text>
               <Input
                 style={styles.input}
                 size="small"
                 placeholder="Job"
-                label="Edit Job"
+                label="Add Job"
                 onChangeText={val => this.setState({name: val})}
                 value={this.state.name}
               />
@@ -279,8 +268,8 @@ class AddJobScreen extends Component {
                 size="small"
                 placeholder="Salary"
                 label="Salary"
-                onChangeText={val => this.setState({price: val})}
-                value={rupiah.convert(this.state.salary)}
+                onChangeText={val => this.setState({salary: val})}
+                value={`${this.state.salary}`}
               />
               {/* <Input
                 keyboardType="numeric"
@@ -307,7 +296,7 @@ class AddJobScreen extends Component {
                 <Button
                   status="primary"
                   style={{marginTop: 12}}
-                  onPress={() => this.updateProduct()}>
+                  onPress={() => this.addJob()}>
                   Save changes
                 </Button>
               )}

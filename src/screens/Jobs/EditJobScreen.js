@@ -89,7 +89,7 @@ class EditJobScreen extends Component {
   //     });
   // }
 
-  async updateProduct() {
+  async updateJob() {
     const {
       name,
       description,
@@ -279,7 +279,7 @@ class EditJobScreen extends Component {
                 size="small"
                 placeholder="Salary"
                 label="Salary"
-                onChangeText={val => this.setState({price: val})}
+                onChangeText={val => this.setState({salary: val})}
                 value={rupiah.convert(this.state.salary)}
               />
               {/* <Input
@@ -307,7 +307,7 @@ class EditJobScreen extends Component {
                 <Button
                   status="primary"
                   style={{marginTop: 12}}
-                  onPress={() => this.updateProduct()}>
+                  onPress={() => this.updateJob()}>
                   Save changes
                 </Button>
               )}

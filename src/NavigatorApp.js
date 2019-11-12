@@ -7,6 +7,7 @@ import Jobs from './components/Jobs/Jobs';
 import EditJobScreen from './screens/Jobs/EditJobScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import DetailJobScreen from './screens/Jobs/DetailJobScreen';
+import AddJobScreen from './screens/Jobs/AddJobScreen';
 
 const MainNavigator = createStackNavigator({
   Jobs: {
@@ -27,6 +28,9 @@ const MainNavigator = createStackNavigator({
   },
   EditJobScreen: {
     screen: EditJobScreen,
+  },
+  AddJobScreen: {
+    screen: AddJobScreen,
   },
 });
 
