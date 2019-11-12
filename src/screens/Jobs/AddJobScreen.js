@@ -12,7 +12,7 @@ import {WaveIndicator} from 'react-native-indicators';
 import axios from 'axios';
 import rupiah from 'rupiah-format';
 
-class EditJobScreen extends Component {
+class AddJobScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -350,4 +350,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditJobScreen;
+export default AddJobScreen;
