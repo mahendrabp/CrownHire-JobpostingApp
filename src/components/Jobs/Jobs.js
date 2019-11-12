@@ -3,17 +3,30 @@ import {
   View,
   FlatList,
   StyleSheet,
-  Image,
   Dimensions,
   ToastAndroid,
   TouchableOpacity,
   TextInput,
   RefreshControl,
+  Image,
 } from 'react-native';
 import {Text, Button, Icon, Input, Spinner} from 'react-native-ui-kitten';
 import axios from 'axios';
-import {Container, Card, CardItem, Body, Header, Content} from 'native-base';
+import {
+  Container,
+  Card,
+  CardItem,
+  Body,
+  Header,
+  Content,
+  CardImage,
+  Badge,
+} from 'native-base';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import moment from 'moment';
+import 'moment-timezone';
+import 'moment/locale/id';
+import rupiah from 'rupiah-format';
 
 class Jobs extends Component {
   constructor(props) {
@@ -72,10 +85,9 @@ class Jobs extends Component {
 
     await axios
       .get(
-        `http://10.0.2.2:5200/api/v1/jobs?name=&location&limit=100&page=1&sortby=name`,
+        `http://10.0.2.2:5200/api/v1/jobs?name=&location&limit=100&page=1&sortby=updated_at&orderby=desc`,
       )
       .then(res => {
-        console.log(res.data.data.result);
         this.setState({
           data: res.data.data.result,
           isLoading: false,
@@ -96,7 +108,7 @@ class Jobs extends Component {
 
     await axios
       .get(
-        `http://10.0.2.2:5200/api/v1/jobs?name=${event.nativeEvent.text}&location&limit=100&page=1&sortby=name`,
+        `http://10.0.2.2:5200/api/v1/jobs?name=${event.nativeEvent.text}&location&limit=100&page=1&sortby=updated_at&orderby=desc`,
       )
       .then(res => {
         console.log(res.data.data.result);
@@ -140,7 +152,7 @@ class Jobs extends Component {
               <View style={styles.rowBack}>
                 <TouchableOpacity
                   onPress={() =>
-                    this.props.navigation.navigate('EditScreen', data.item)
+                    this.props.navigation.navigate('EditJobScreen', data.item)
                   }>
                   <View style={{alignItems: 'center'}}>
                     <Icon
@@ -168,7 +180,9 @@ class Jobs extends Component {
             renderItem={({item, index}) => (
               <View style={{width: '100%'}}>
                 <TouchableOpacity
-                  onPress={() => alert(item.id)}
+                  onPress={() =>
+                    this.props.navigation.navigate('DetailJobScreen', item)
+                  }
                   activeOpacity={1}>
                   {/* <View style={styles.card}>
                     <View style={[styles.displayRow, {padding: 12}]}>
@@ -190,15 +204,96 @@ class Jobs extends Component {
                       </View>
                     </View>
                   </View> */}
-                  <Card>
-                    <CardItem>
-                      <Body>
-                        <Text>{item.job}</Text>
-                        <Text>{item.location}</Text>
-                        <Text>{item.salary}</Text>
-                      </Body>
-                    </CardItem>
-                  </Card>
+                  <View>
+                    <Card style={{borderRadius: 18, marginBottom: 10}}>
+                      <CardItem
+                        bordered
+                        style={{
+                          borderRadius: 18,
+                        }}>
+                        <Body style={{flexDirection: 'row'}}>
+                          <View>
+                            <Image
+                              source={{
+                                uri: `http://10.0.2.2:5200/public/logo/${item.logo}`,
+                              }}
+                              style={{
+                                height: 100,
+                                width: 100,
+                              }}
+                            />
+                          </View>
+                          <View style={{marginLeft: 16, width: 100, flex: 1}}>
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                fontSize: 17,
+                                fontFamily: 'Poppins-Medium',
+                              }}>
+                              {item.job}
+                            </Text>
+                            <Text
+                              style={{
+                                fontFamily: 'Poppins-Regular',
+                                fontSize: 12,
+                              }}>
+                              {item.company}
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                marginLeft: 4,
+                              }}>
+                              <View>
+                                <Text
+                                  style={{
+                                    flexWrap: 'wrap',
+                                    width: 150,
+                                    fontSize: 12,
+                                    fontFamily: 'Poppins-Light',
+                                  }}>
+                                  {item.location}
+                                </Text>
+                              </View>
+                              <View style={{marginRight: 10}}>
+                                <Text
+                                  style={{
+                                    textAlign: 'left',
+                                    fontSize: 12,
+                                    fontFamily: 'Poppins-Light',
+                                  }}>
+                                  {moment(item.updated_at).fromNow(true)} yang
+                                  lalu
+                                </Text>
+                              </View>
+                            </View>
+                            <Text
+                              style={{
+                                fontSize: 13,
+                                fontFamily: 'Poppins-Regular',
+                                color: '#0DC200',
+                              }}>
+                              {rupiah.convert(item.salary)}
+                            </Text>
+                            <View>
+                              <Badge style={{backgroundColor: '#409BF6'}}>
+                                <Text
+                                  style={{
+                                    color: 'white',
+                                    fontFamily: 'Poppins-Medium',
+                                    fontSize: 11,
+                                  }}>
+                                  {item.category}
+                                </Text>
+                              </Badge>
+                              {/* {this._renderBadge()} */}
+                            </View>
+                          </View>
+                        </Body>
+                      </CardItem>
+                    </Card>
+                  </View>
                 </TouchableOpacity>
               </View>
             )}
@@ -242,7 +337,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   textTitle: {
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: 'Poppins',
   },
   rowBack: {
     alignItems: 'center',
