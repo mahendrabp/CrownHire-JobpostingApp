@@ -28,6 +28,8 @@ import 'moment-timezone';
 import 'moment/locale/id';
 import rupiah from 'rupiah-format';
 import FAB from 'react-native-fab';
+import Modal from 'react-native-modal';
+import {WaveIndicator} from 'react-native-indicators';
 
 class Jobs extends Component {
   constructor(props) {
@@ -72,6 +74,9 @@ class Jobs extends Component {
       message: '',
       isVisible: false,
       locationArray: ['Jakarta', 'Bandung', 'Solo'],
+      isLoadingDelete: false,
+      deleteJobId: '',
+      showModalDelete: false,
       // getToken: false
     };
   }
@@ -126,6 +131,59 @@ class Jobs extends Component {
       });
   }
 
+  async deleteJob() {
+    this.setState({
+      isLoadingDelete: true,
+    });
+    await axios
+      .delete(`http://10.0.2.2:5200/api/v1/jobs/${this.state.deleteJobId}`)
+      .then(res => {
+        console.log(res);
+
+        if (res.data.status == 200) {
+          const jobIndex = this.state.data
+            .map(val => {
+              return val.id;
+            })
+            .indexOf(this.state.deleteJobId);
+
+          let data = this.state.data;
+          data.splice(jobIndex, 1);
+
+          this.setState({
+            data,
+          });
+
+          ToastAndroid.show('Product has been deleted', ToastAndroid.LONG);
+        }
+
+        if (res.data.status != 200) {
+          ToastAndroid.show('Something went wrong', ToastAndroid.LONG);
+        }
+
+        this.setState({
+          isLoadingDelete: false,
+        });
+
+        this.toggleModalDelete();
+      })
+      .catch(err => {
+        console.log(err.message);
+        this.setState({
+          isLoadingDelete: false,
+        });
+        this.toggleModalDelete();
+      });
+  }
+
+  toggleModalDelete(id) {
+    const showModalDelete = !this.state.showModalDelete;
+    this.setState({
+      showModalDelete,
+      deleteJobId: id,
+    });
+  }
+
   resetSearch() {
     this.setState({
       search: '',
@@ -147,6 +205,38 @@ class Jobs extends Component {
     } else {
       return (
         <>
+          <Modal
+            isVisible={this.state.showModalDelete}
+            animationIn="zoomIn"
+            animationOut="fadeOut"
+            animationInTiming={400}
+            animationOutTiming={200}>
+            <View style={styles.modal}>
+              <Text category="h6" style={styles.modalTitle}>
+                Are you sure want to clear ?
+              </Text>
+              <View style={styles.modalFooter}>
+                {this.state.isLoadingDelete ? (
+                  <WaveIndicator color="#f24f71" />
+                ) : (
+                  <Button
+                    style={styles.modalActionYes}
+                    status="danger"
+                    onPress={() => this.deleteJob()}>
+                    Yes, sure!
+                  </Button>
+                )}
+                <Button
+                  style={styles.modalActionNo}
+                  status="basic"
+                  appearance="outline"
+                  onPress={() => this.toggleModalDelete()}>
+                  Cancel
+                </Button>
+              </View>
+            </View>
+          </Modal>
+
           <SwipeListView
             data={this.state.data}
             renderHiddenItem={(data, index) => (
