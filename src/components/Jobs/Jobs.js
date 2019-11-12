@@ -27,6 +27,7 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment/locale/id';
 import rupiah from 'rupiah-format';
+import FAB from 'react-native-fab';
 
 class Jobs extends Component {
   constructor(props) {
@@ -326,6 +327,15 @@ class Jobs extends Component {
           />
           <View style={{marginTop: 12}}>{this._renderListJob()}</View>
         </View>
+        <FAB
+          buttonColor="#409BF6"
+          iconTextColor="#FFFFFF"
+          // onClickAction={() => this.props.navigation.navigate('AddScreen')}
+          visible={true}
+          iconTextComponent={
+            <Icon name="plus-outline" width={30} height={30} fill="#fff" />
+          }
+        />
       </>
     );
   }
