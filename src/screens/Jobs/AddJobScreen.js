@@ -101,10 +101,10 @@ class AddJobScreen extends Component {
     formData.append('category_id', category_id);
     formData.append('company_id', company_id);
 
-    console.log(name, description, category_id);
+    // console.log(name, description, category_id);
 
     await axios
-      .post(`http://10.0.2.2:5200/api/v1/jobs/`, formData)
+      .post(`http://localhost:5200/api/v1/jobs/`, formData)
       .then(res => {
         // console.log(res.data.data);
         if (res.data.status !== 200) {
@@ -134,7 +134,7 @@ class AddJobScreen extends Component {
   }
 
   async dataCategory() {
-    const url = 'http://10.0.2.2:5200/api/v1/categories';
+    const url = 'http://localhost:5200/api/v1/categories';
     await axios
       .get(url)
       .then(result => {
@@ -170,7 +170,7 @@ class AddJobScreen extends Component {
   }
 
   async dataCompany() {
-    const url = 'http://10.0.2.2:5200/api/v1/companies';
+    const url = 'http://localhost:5200/api/v1/companies';
     await axios
       .get(url)
       .then(result => {

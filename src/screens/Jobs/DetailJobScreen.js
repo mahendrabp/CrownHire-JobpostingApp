@@ -42,7 +42,7 @@ class DetailJobScreen extends Component {
   }
 
   render() {
-    const imageUri = `http://10.0.2.2:5200/public/logo/${this.state.logo}`;
+    const imageUri = `http://localhost:5200/public/logo/${this.state.logo}`;
     const {navigation} = this.props;
     // console.log(this.props.navigation.getParam('description'));
     return (
@@ -55,20 +55,20 @@ class DetailJobScreen extends Component {
           <Text>{navigation.getParam('category')}</Text>
         </View> */}
         <ParallaxScrollView
-          backgroundColor="##00B6D7"
+          backgroundColor="#fff"
           parallaxHeaderHeight={400}
           backgroundScrollSpeed={2}
           stickyHeaderHeight={80}
-          renderFixedHeader={() => (
-            <Header
-              title={this.state.job}
-              rightComponent={
-                <Button transparent onPress={() => navigation.goBack()}>
-                  <Text>Back</Text>
-                </Button>
-              }
-            />
-          )}
+          // renderFixedHeader={() => (
+          //   <Header
+          //     title={this.state.job}
+          //     rightComponent={
+          //       <Button transparent onPress={() => navigation.goBack()}>
+          //         <Text>Back</Text>
+          //       </Button>
+          //     }
+          //   />
+          // )}
           renderBackground={() => (
             <Image
               style={{
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 2,
     backgroundColor: '#ccc',
-    marginVertical: 5,
+    // marginVertical: 5,
   },
   title: {
     color: '#fff',

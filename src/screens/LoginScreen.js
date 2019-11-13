@@ -28,8 +28,17 @@ class LoginScreen extends Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.checkAuth();
+  }
 
+  async checkAuth() {
+    const token = await AsyncStorage.getItem('token');
+    if (token !== null) {
+      this.props.navigation.replace('Home');
+    }
+    // console.log(token);
+  }
   onChangeEmail = value => {
     let validationRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -54,7 +63,7 @@ class LoginScreen extends Component {
   onSignIn = () => {
     this.setState({isLoading: true});
     const {email, password} = this.state;
-    const url = 'http://10.0.2.2:5200/api/v1/users/login';
+    const url = 'http://localhost:5200/api/v1/users/login';
     const payload = {
       email,
       password,
@@ -64,7 +73,7 @@ class LoginScreen extends Component {
       await axios
         .post(url, payload)
         .then(response => {
-          console.log(response);
+          // console.log(response);
           if (response.data.status == 500 || response.data.status == 400) {
             ToastAndroid.show(
               response.data.message,
@@ -75,9 +84,9 @@ class LoginScreen extends Component {
               isLoading: false,
             });
           }
-          console.log(response);
+          // console.log(response);
           if (response.data.status == 200) {
-            console.log(response);
+            // console.log(response);
             AsyncStorage.setItem('token', response.data.token);
             this.props.navigation.navigate('Home');
             this.setState({
@@ -86,7 +95,7 @@ class LoginScreen extends Component {
           }
         })
         .catch(error => {
-          console.log(error);
+          // console.log(error);
           this.setState({isLoading: false});
           ToastAndroid.showWithGravityAndOffset(
             'Invalid Username/Password!',

@@ -112,10 +112,10 @@ class EditJobScreen extends Component {
     formData.append('category_id', category_id);
     formData.append('company_id', company_id);
 
-    console.log(name, description, category_id);
+    // console.log(name, description, category_id);
 
     await axios
-      .patch(`http://10.0.2.2:5200/api/v1/jobs/${this.state.id}`, formData)
+      .patch(`http://localhost:5200/api/v1/jobs/${this.state.id}`, formData)
 
       .then(res => {
         // console.log(res.data.status);
@@ -146,7 +146,7 @@ class EditJobScreen extends Component {
   }
 
   async dataCategory() {
-    const url = 'http://10.0.2.2:5200/api/v1/categories';
+    const url = 'http://localhost:5200/api/v1/categories';
     await axios
       .get(url)
       .then(result => {
@@ -182,7 +182,7 @@ class EditJobScreen extends Component {
   }
 
   async dataCompany() {
-    const url = 'http://10.0.2.2:5200/api/v1/companies';
+    const url = 'http://localhost:5200/api/v1/companies';
     await axios
       .get(url)
       .then(result => {

@@ -8,28 +8,49 @@ import EditJobScreen from './screens/Jobs/EditJobScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import DetailJobScreen from './screens/Jobs/DetailJobScreen';
 import AddJobScreen from './screens/Jobs/AddJobScreen';
+import Company from './screens/Companies/Company';
 
 const MainNavigator = createStackNavigator({
-  Login: {
-    screen: LoginScreen,
-  },
   Home: {
     screen: HomeScreen,
+    navigationOptions: {
+      header: null,
+    },
   },
   Jobs: {
     screen: Jobs,
+    navigationOptions: {
+      header: null,
+    },
   },
+  Login: {
+    screen: LoginScreen,
+    navigationOptions: {
+      header: null,
+    },
+  },
+
   DetailJobScreen: {
     screen: DetailJobScreen,
+    navigationOptions: {
+      header: null,
+    },
   },
-  Register: {
-    screen: RegisterScreen,
+  AddJobScreen: {
+    screen: AddJobScreen,
   },
   EditJobScreen: {
     screen: EditJobScreen,
   },
-  AddJobScreen: {
-    screen: AddJobScreen,
+
+  Company: {
+    screen: Company,
+  },
+  Register: {
+    screen: RegisterScreen,
+    navigationOptions: {
+      header: null,
+    },
   },
 });
 

@@ -9,6 +9,7 @@ import {
   TextInput,
   RefreshControl,
   Image,
+  ScrollView,
 } from 'react-native';
 import {Text, Button, Icon, Input, Spinner} from 'react-native-ui-kitten';
 import axios from 'axios';
@@ -31,6 +32,7 @@ import FAB from 'react-native-fab';
 import Modal from 'react-native-modal';
 import {WaveIndicator} from 'react-native-indicators';
 import {NavigationEvents} from 'react-navigation';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class Jobs extends Component {
   constructor(props) {
@@ -85,6 +87,14 @@ class Jobs extends Component {
     this.getJob();
   }
 
+  // async checkAuth() {
+  //   const token = await AsyncStorage.getItem('token');
+  //   if (!token) {
+  //     this.props.navigation.replace('Login');
+  //   }
+  //   console.log(token);
+  // }
+
   async getJob(search, location, limit, page, sortby, orderby) {
     this.setState({
       isLoading: true,
@@ -92,12 +102,13 @@ class Jobs extends Component {
 
     await axios
       .get(
-        `http://10.0.2.2:5200/api/v1/jobs?name=&location&limit=5&page=1&sortby=updated_at&orderby=desc`,
+        `http://localhost:5200/api/v1/jobs?name=&location&limit=5&page=1&sortby=updated_at&orderby=desc`,
       )
       .then(res => {
         this.setState({
           data: res.data.data.result,
           isLoading: false,
+          status: '',
         });
       })
       .catch(err => {
@@ -112,10 +123,34 @@ class Jobs extends Component {
     this.setState({
       isLoading: true,
     });
-
     await axios
       .get(
-        `http://10.0.2.2:5200/api/v1/jobs?name=${event.nativeEvent.text}&location&limit=100&page=1&sortby=updated_at&orderby=desc`,
+        `http://localhost:5200/api/v1/jobs?name=${event.nativeEvent.text}&location=${this.state.location}&limit=100&page=1&sortby=updated_at&orderby=desc`,
+      )
+      .then(res => {
+        console.log(res.data.data.result);
+        this.setState({
+          data: res.data.data.result,
+          isLoading: false,
+          status: '',
+        });
+      })
+      .catch(err => {
+        this.setState({
+          isLoading: false,
+          status: '404',
+        });
+        console.log(err.message);
+      });
+  }
+
+  async searchLocation(event) {
+    this.setState({
+      isLoading: true,
+    });
+    await axios
+      .get(
+        `http://localhost:5200/api/v1/jobs?name=${this.state.search}&location=${event.nativeEvent.text}&limit=100&page=1&sortby=updated_at&orderby=desc`,
       )
       .then(res => {
         // console.log(res.data.data.result);
@@ -127,6 +162,7 @@ class Jobs extends Component {
       .catch(err => {
         this.setState({
           isLoading: false,
+          status: '404',
         });
         console.log(err);
       });
@@ -137,7 +173,7 @@ class Jobs extends Component {
       isLoadingDelete: true,
     });
     await axios
-      .delete(`http://10.0.2.2:5200/api/v1/jobs/${this.state.deleteJobId}`)
+      .delete(`http://localhost:5200/api/v1/jobs/${this.state.deleteJobId}`)
       .then(res => {
         // console.log(res);
 
@@ -191,6 +227,12 @@ class Jobs extends Component {
     });
     this.getJob();
   }
+  resetLocation() {
+    this.setState({
+      location: '',
+    });
+    this.getJob();
+  }
 
   _renderIconSearch = style => {
     return <Icon {...style} name="close-outline" />;
@@ -201,6 +243,12 @@ class Jobs extends Component {
       return (
         <View style={{alignItems: 'center', marginTop: 20}}>
           <Spinner status="alternative" />
+        </View>
+      );
+    } else if (this.state.status === '404') {
+      return (
+        <View style={{alignItems: 'center', marginTop: 20}}>
+          <Text>Not FOUNND</Text>
         </View>
       );
     } else {
@@ -297,21 +345,21 @@ class Jobs extends Component {
                     </View>
                   </View> */}
                   <View>
-                    <Card style={{borderRadius: 18, marginBottom: 10}}>
+                    <Card style={{borderRadius: 10, marginBottom: 10}}>
                       <CardItem
                         bordered
                         style={{
-                          borderRadius: 18,
+                          borderRadius: 10,
                         }}>
                         <Body style={{flexDirection: 'row'}}>
                           <View>
                             <Image
                               source={{
-                                uri: `http://10.0.2.2:5200/public/logo/${item.logo}`,
+                                uri: `http://localhost:5200/public/logo/${item.logo}`,
                               }}
                               style={{
-                                height: 100,
-                                width: 100,
+                                height: 80,
+                                width: 80,
                               }}
                             />
                           </View>
@@ -335,7 +383,7 @@ class Jobs extends Component {
                               style={{
                                 flexDirection: 'row',
                                 justifyContent: 'space-around',
-                                marginLeft: 4,
+                                marginLeft: 20,
                               }}>
                               <View>
                                 <Text
@@ -402,30 +450,48 @@ class Jobs extends Component {
     }
   };
 
-  // _autoRender() {
-  //   const {navigation} = this.props;
-  //   let data = this.state.data;
-  //   // console.log(this.state.data);
-  //   this.setState({
-  //     data: [...this.state.data, navigation.getParam('data')],
-  //   });
-  // }
+  _autoRender() {
+    const {navigation} = this.props;
+    let data = [...this.state.data];
+    // console.log(this.state.data);
+    this.setState({
+      data: [...this.state.data, navigation.getParam('data')],
+    });
+  }
 
   render() {
     return (
       <>
         <View style={styles.container}>
-          {/* <NavigationEvents onDidFocus={() => this._autoRender()} /> */}
-          <Input
-            style={{marginTop: 12}}
-            size="small"
-            placeholder="Search.."
-            value={this.state.search}
-            icon={this._renderIconSearch}
-            onIconPress={() => this.resetSearch()}
-            onChangeText={val => this.setState({search: val})}
-            onSubmitEditing={event => this.searchJob(event)}
-          />
+          <NavigationEvents on={() => this._autoRender()} />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              margin: 3,
+            }}>
+            <Input
+              style={{flex: 1, marginRight: 2}}
+              size="small"
+              placeholder="Search.."
+              value={this.state.search}
+              icon={this._renderIconSearch}
+              onIconPress={() => this.resetSearch()}
+              onChangeText={val => this.setState({search: val})}
+              onSubmitEditing={event => this.searchJob(event)}
+            />
+            <Input
+              style={{flex: 1, marginLeft: 2}}
+              size="small"
+              placeholder="Location"
+              value={this.state.location}
+              icon={this._renderIconSearch}
+              onIconPress={() => this.resetSearch()}
+              onChangeText={val => this.setState({location: val})}
+              onSubmitEditing={event => this.searchLocation(event)}
+            />
+          </View>
+
           <View style={{marginTop: 12}}>{this._renderListJob()}</View>
         </View>
         <FAB
@@ -445,7 +511,8 @@ class Jobs extends Component {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 6,
-    marginBottom: 40,
+    // marginBottom: 40,
+    paddingBottom: 150,
   },
   textTitle: {
     fontFamily: 'Poppins',

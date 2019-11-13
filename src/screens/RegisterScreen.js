@@ -36,6 +36,12 @@ class RegisterScreen extends Component {
         isEmailValid: false,
         invalidMessage: 'email tidak valid',
       });
+    } else if (value === '' || value === null) {
+      this.setState({
+        email: value,
+        isEmailValid: false,
+        invalidMessage: 'email tidak boleh kosong',
+      });
     } else {
       this.setState({
         email: value,
@@ -51,7 +57,7 @@ class RegisterScreen extends Component {
   onSignUp = () => {
     this.setState({isLoading: true});
     const {email, password} = this.state;
-    const url = 'http://10.0.2.2:5200/api/v1/users/register';
+    const url = 'http://localhost:5200/api/v1/users/register';
     const payload = {
       email,
       password,
@@ -62,7 +68,7 @@ class RegisterScreen extends Component {
         .post(url, payload)
         .then(response => {
           console.log(response);
-          if (response.data.status == 500 || response.data.status == 400) {
+          if (response.data.status != 200) {
             ToastAndroid.show(
               response.data.message,
               ToastAndroid.LONG,
@@ -83,7 +89,7 @@ class RegisterScreen extends Component {
           }
         })
         .catch(error => {
-          console.log(error.message);
+          console.log(error);
           this.setState({isLoading: false});
           ToastAndroid.showWithGravityAndOffset(
             'Invalid Username/Password!',
@@ -99,7 +105,7 @@ class RegisterScreen extends Component {
   // onSignUp = () => {
   //   this.setState({isLoading: true});
   //   const {email, password} = this.state;
-  //   const url = 'http://10.0.2.2:5200/api/v1/users/register';
+  //   const url = 'http://localhost:5200/api/v1/users/register';
   //   const payload = {
   //     email,
   //     password,
@@ -115,7 +121,7 @@ class RegisterScreen extends Component {
 
   _renderBtnSignUp = () => {
     if (this.state.isLoading == true) {
-      return <WaveIndicator color="#B894FF" />;
+      return <WaveIndicator color="#3C82FF" />;
     } else {
       return (
         <Button
@@ -188,6 +194,19 @@ class RegisterScreen extends Component {
               DAFTAR
             </Button> */}
               {this._renderBtnSignUp()}
+
+              <View
+                style={{
+                  marginTop: 18,
+                  justifyContent: 'center',
+                  flexDirection: 'row',
+                }}>
+                <Text>Sudah punya akun ? </Text>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.goBack()}>
+                  <Text style={styles.textPurple}>Masuk Disini.</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </ScrollView>
         </View>
@@ -229,6 +248,9 @@ const styles = StyleSheet.create({
   },
   textDanger: {
     color: '#f5365c',
+  },
+  textPurple: {
+    color: '#3C82FF',
   },
 });
 export default RegisterScreen;
