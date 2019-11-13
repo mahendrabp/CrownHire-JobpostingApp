@@ -10,19 +10,18 @@ import DetailJobScreen from './screens/Jobs/DetailJobScreen';
 import AddJobScreen from './screens/Jobs/AddJobScreen';
 
 const MainNavigator = createStackNavigator({
-  Jobs: {
-    screen: Jobs,
-  },
-  DetailJobScreen: {
-    screen: DetailJobScreen,
-  },
   Login: {
     screen: LoginScreen,
   },
   Home: {
     screen: HomeScreen,
   },
-
+  Jobs: {
+    screen: Jobs,
+  },
+  DetailJobScreen: {
+    screen: DetailJobScreen,
+  },
   Register: {
     screen: RegisterScreen,
   },

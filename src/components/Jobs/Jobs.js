@@ -30,6 +30,7 @@ import rupiah from 'rupiah-format';
 import FAB from 'react-native-fab';
 import Modal from 'react-native-modal';
 import {WaveIndicator} from 'react-native-indicators';
+import {NavigationEvents} from 'react-navigation';
 
 class Jobs extends Component {
   constructor(props) {
@@ -91,7 +92,7 @@ class Jobs extends Component {
 
     await axios
       .get(
-        `http://10.0.2.2:5200/api/v1/jobs?name=&location&limit=100&page=1&sortby=updated_at&orderby=desc`,
+        `http://10.0.2.2:5200/api/v1/jobs?name=&location&limit=5&page=1&sortby=updated_at&orderby=desc`,
       )
       .then(res => {
         this.setState({
@@ -117,7 +118,7 @@ class Jobs extends Component {
         `http://10.0.2.2:5200/api/v1/jobs?name=${event.nativeEvent.text}&location&limit=100&page=1&sortby=updated_at&orderby=desc`,
       )
       .then(res => {
-        console.log(res.data.data.result);
+        // console.log(res.data.data.result);
         this.setState({
           data: res.data.data.result,
           isLoading: false,
@@ -138,7 +139,7 @@ class Jobs extends Component {
     await axios
       .delete(`http://10.0.2.2:5200/api/v1/jobs/${this.state.deleteJobId}`)
       .then(res => {
-        console.log(res);
+        // console.log(res);
 
         if (res.data.status == 200) {
           const jobIndex = this.state.data
@@ -213,11 +214,11 @@ class Jobs extends Component {
             animationOutTiming={200}>
             <View style={styles.modal}>
               <Text category="h6" style={styles.modalTitle}>
-                Are you sure want to clear ?
+                Are you sure want to delete ?
               </Text>
               <View style={styles.modalFooter}>
                 {this.state.isLoadingDelete ? (
-                  <WaveIndicator color="#f24f71" />
+                  <WaveIndicator color="#409BF6" />
                 ) : (
                   <Button
                     style={styles.modalActionYes}
@@ -401,10 +402,20 @@ class Jobs extends Component {
     }
   };
 
+  // _autoRender() {
+  //   const {navigation} = this.props;
+  //   let data = this.state.data;
+  //   // console.log(this.state.data);
+  //   this.setState({
+  //     data: [...this.state.data, navigation.getParam('data')],
+  //   });
+  // }
+
   render() {
     return (
       <>
         <View style={styles.container}>
+          {/* <NavigationEvents onDidFocus={() => this._autoRender()} /> */}
           <Input
             style={{marginTop: 12}}
             size="small"

@@ -53,12 +53,12 @@ class AddJobScreen extends Component {
     //   category => category.id == navigation.getParam('category_id'),
     // );
 
-    console.log(navigation.getParam('category_id'));
+    // console.log(navigation.getParam('category_id'));
     // await this.getCategory();
 
-    const current_category = this.state.categories.find(
-      category => category.id === navigation.getParam('category_id'),
-    );
+    // const current_category = this.state.categories.find(
+    //   category => category.id === navigation.getParam('category_id'),
+    // );
   }
 
   // async getCategory() {
@@ -105,12 +105,11 @@ class AddJobScreen extends Component {
 
     await axios
       .post(`http://10.0.2.2:5200/api/v1/jobs/`, formData)
-
       .then(res => {
-        console.log(res.data.status);
+        // console.log(res.data.data);
         if (res.data.status !== 200) {
           this.setState({
-            // errors: res.data.errors,
+            errors: res.data.errors,
             // isLoadingBtn: false,
           });
         }
@@ -140,7 +139,7 @@ class AddJobScreen extends Component {
       .get(url)
       .then(result => {
         const dataCategory = result.data.data;
-        console.log(result.data.data);
+        // console.log(result.data.data);
         this.setState({
           categories: dataCategory,
         });
@@ -159,7 +158,7 @@ class AddJobScreen extends Component {
       current_category: current_category,
     });
 
-    console.log(current_category);
+    // console.log(current_category);
   }
 
   async handleSelectCategory(data) {
@@ -176,7 +175,7 @@ class AddJobScreen extends Component {
       .get(url)
       .then(result => {
         const dataCompany = result.data.data;
-        console.log(result.data.data);
+        // console.log(result.data.data);
         this.setState({
           companies: dataCompany,
         });

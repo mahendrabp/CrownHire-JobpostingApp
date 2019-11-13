@@ -8,25 +8,35 @@ class DrawerContent extends Component {
     super(props);
   }
 
-  drawerMenu = [
+  drawerData = [
     {
       title: 'Home',
       screen: 'Home',
+      icon: this.SettingIcon,
     },
     {
-      title: 'Login',
-      screen: 'Login',
-    },
-    {
-      title: 'Register',
-      screen: 'Register',
+      title: 'get All Jobs',
+      screen: 'Jobs',
+      icon: this.HistoryIcon,
     },
   ];
+
+  onRouteSelect = index => {
+    const {[index]: route} = this.drawerData;
+    // navigate with React Navigation
+    this.props.navigation.navigate(route.screen);
+  };
+
   render() {
     return (
       <>
         <View style={styles.container}>
-          <Drawer data={this.drawerMenu}></Drawer>
+          <Drawer
+            data={this.drawerData}
+            // header={this.__renderProfileHeader}
+            // footer={this.__renderFooter}
+            onSelect={this.onRouteSelect}
+          />
         </View>
       </>
     );

@@ -44,7 +44,7 @@ class DetailJobScreen extends Component {
   render() {
     const imageUri = `http://10.0.2.2:5200/public/logo/${this.state.logo}`;
     const {navigation} = this.props;
-    console.log(this.props.navigation.getParam('description'));
+    // console.log(this.props.navigation.getParam('description'));
     return (
       <>
         {/* <View>
