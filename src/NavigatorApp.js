@@ -9,6 +9,7 @@ import EditJobScreen from './screens/Jobs/EditJobScreen';
 import DetailJobScreen from './screens/Jobs/DetailJobScreen';
 import AddJobScreen from './screens/Jobs/AddJobScreen';
 import Company from './screens/Companies/Company';
+import DetailCompanyScreen from './screens/Companies/DetailCompanyScreen';
 
 const MainNavigator = createStackNavigator({
   Home: {
@@ -41,9 +42,11 @@ const MainNavigator = createStackNavigator({
   EditJobScreen: {
     screen: EditJobScreen,
   },
-
   Company: {
     screen: Company,
+  },
+  DetailCompanyScreen: {
+    screen: DetailCompanyScreen,
   },
   Register: {
     screen: RegisterScreen,

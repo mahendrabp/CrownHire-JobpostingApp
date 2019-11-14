@@ -60,29 +60,40 @@ class Company extends Component {
         <ScrollView>
           <Card style={{marginVertical: 10}}>
             {this.state.companies.map(v => (
-              <View
-                style={{
-                  marginVertical: 20,
-                  elevation: 10,
-                  borderWidth: 1,
-                  borderColor: '#fff',
-                }}>
-                <CardItem style={{justifyContent: 'center'}}>
-                  <View>
-                    <Text style={{fontFamily: 'Poppins-Regular', fontSize: 15}}>
-                      {v.name}
-                    </Text>
-                  </View>
-                </CardItem>
-                <CardItem cardBody style={{flex: 1}}>
-                  <Image
-                    source={{
-                      uri: `http://localhost:5200/public/logo/${v.logo}`,
-                    }}
-                    style={{height: 100, width: 100, flex: 1}}
-                  />
-                </CardItem>
-              </View>
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate('DetailCompanyScreen', v)
+                }>
+                <View
+                  key={v.id}
+                  style={{
+                    marginVertical: 20,
+                    elevation: 10,
+                    borderWidth: 1,
+                    borderColor: '#fff',
+                  }}>
+                  <CardItem
+                    style={{justifyContent: 'center'}}
+                    onPress={() =>
+                      this.props.navigation.navigate('CompanyDetailScreen', v)
+                    }>
+                    <View>
+                      <Text
+                        style={{fontFamily: 'Poppins-Regular', fontSize: 15}}>
+                        {v.name}
+                      </Text>
+                    </View>
+                  </CardItem>
+                  <CardItem cardBody style={{flex: 1}}>
+                    <Image
+                      source={{
+                        uri: `http://localhost:5200/public/logo/${v.logo}`,
+                      }}
+                      style={{height: 100, width: 100, flex: 1}}
+                    />
+                  </CardItem>
+                </View>
+              </TouchableOpacity>
             ))}
           </Card>
         </ScrollView>
