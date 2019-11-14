@@ -267,6 +267,7 @@ class HomeScreen extends Component {
                     style={{backgroundColor: '#fff'}}>
                     {this.state.data.map(v => (
                       <TouchableOpacity
+                        key={v.id}
                         onPress={() =>
                           this.props.navigation.navigate('DetailJobScreen', v)
                         }>

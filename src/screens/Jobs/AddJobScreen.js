@@ -8,10 +8,10 @@ import {
   Picker,
   ToastAndroid,
 } from 'react-native';
-import {Text, Input, Select, Button} from 'react-native-ui-kitten';
+import {Text, Input, Button} from 'react-native-ui-kitten';
 import {WaveIndicator} from 'react-native-indicators';
 import axios from 'axios';
-import RNPickerSelect from 'react-native-picker-select';
+
 import rupiah from 'rupiah-format';
 
 class AddJobScreen extends Component {

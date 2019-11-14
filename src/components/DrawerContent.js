@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StatusBar, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 // import Drawer from 'react-native-drawer';
 import {
   Drawer,

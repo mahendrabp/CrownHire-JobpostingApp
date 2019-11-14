@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import {Button, Icon} from 'react-native-ui-kitten';
+import {Button} from 'react-native-ui-kitten';
 
 import notFoundImage from '../../assets/404notfound.png';
 

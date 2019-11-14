@@ -113,13 +113,6 @@ class LoginScreen extends Component {
       return <WaveIndicator color="#3C82FF" />;
     } else {
       return (
-        // <Button
-        //   style={styles.button}
-        //   appearance="outline"
-        //   status="primary"
-        //   onPress={this.onSignIn}>
-        //   MASUK
-        // </Button>
         <Button
           style={styles.button}
           status="primary"

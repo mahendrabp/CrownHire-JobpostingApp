@@ -1,28 +1,16 @@
 import React, {Component} from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
-  Dimensions,
   ToastAndroid,
   TouchableOpacity,
-  TextInput,
   RefreshControl,
   Image,
   ScrollView,
 } from 'react-native';
 import {Text, Button, Icon, Input, Spinner} from 'react-native-ui-kitten';
 import axios from 'axios';
-import {
-  Container,
-  Card,
-  CardItem,
-  Body,
-  Header,
-  Content,
-  CardImage,
-  Badge,
-} from 'native-base';
+import {Card, CardItem, Body, Badge} from 'native-base';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import moment from 'moment';
 import 'moment-timezone';
@@ -31,10 +19,9 @@ import rupiah from 'rupiah-format';
 import FAB from 'react-native-fab';
 import Modal from 'react-native-modal';
 import {WaveIndicator} from 'react-native-indicators';
-import {NavigationEvents} from 'react-navigation';
+
 import AsyncStorage from '@react-native-community/async-storage';
 import {Facebook as Loader} from 'react-content-loader/native';
-import {Footer, FooterTab} from 'native-base';
 
 class Jobs extends Component {
   constructor(props) {
