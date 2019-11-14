@@ -1,12 +1,21 @@
 import React, {Component} from 'react';
 import {View, Text, StatusBar, StyleSheet} from 'react-native';
 // import Drawer from 'react-native-drawer';
-import {Drawer, Icon, DrawerHeaderFooter, Button} from 'react-native-ui-kitten';
+import {
+  Drawer,
+  Icon,
+  DrawerHeaderFooter,
+  Button,
+  Layout,
+} from 'react-native-ui-kitten';
 import AsyncStorage from '@react-native-community/async-storage';
 
 class DrawerContent extends Component {
   constructor(props) {
     super(props);
+    this.setState = {
+      isLoading: '',
+    };
   }
 
   SettingIcon(style) {
@@ -21,9 +30,7 @@ class DrawerContent extends Component {
   PersonIcon(style) {
     return <Icon {...style} name="person-outline" />;
   }
-  LogoutIcon(style) {
-    return <Icon {...style} name="alert-triangle-outline" />;
-  }
+  LogoutIcon = style => <Icon {...style} name="log-out" />;
 
   drawerData = [
     {
@@ -32,14 +39,14 @@ class DrawerContent extends Component {
       icon: this.SettingIcon,
     },
     {
-      title: 'get All Jobs',
-      screen: 'Jobs',
-      icon: this.JobIcon,
-    },
-    {
-      title: 'get all company',
+      title: 'Perusahaan',
       screen: 'Company',
       icon: this.CompanyIcon,
+    },
+    {
+      title: 'Profil',
+
+      icon: this.PersonIcon,
     },
   ];
 
@@ -50,19 +57,14 @@ class DrawerContent extends Component {
   };
 
   // _renderProfileHeader = () => (
-  //   <DrawerHeaderFooter title="Hello" icon={this.PersonIcon} />
+  //   <DrawerHeaderFooter title="Hello username" icon={this.PersonIcon} />
   // );
 
   _renderFooter = () => (
-    <DrawerHeaderFooter title="Sign out" accessory={this.LogoutButton} />
-  );
-
-  LogoutButton = style => (
-    <Button
-      style={style}
-      icon={this.LogoutIcon}
-      status="danger"
+    <DrawerHeaderFooter
+      title="Keluar"
       onPress={() => this.logout()}
+      icon={this.LogoutIcon}
     />
   );
 
@@ -74,14 +76,14 @@ class DrawerContent extends Component {
   render() {
     return (
       <>
-        <View style={styles.container}>
+        <Layout style={styles.container}>
           <Drawer
             data={this.drawerData}
             header={this._renderProfileHeader}
             footer={this._renderFooter}
             onSelect={this.onRouteSelect}
           />
-        </View>
+        </Layout>
       </>
     );
   }
@@ -90,7 +92,6 @@ class DrawerContent extends Component {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    width: '100%',
   },
 });
 

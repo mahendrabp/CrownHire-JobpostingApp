@@ -13,6 +13,8 @@ import Drawer from 'react-native-drawer';
 import DrawerContent from '../components/DrawerContent';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Item, Input} from 'native-base';
+import Carousel from 'react-native-snap-carousel';
+import {createBottomTabNavigator, TabBarBottom} from 'react-navigation-tabs';
 
 class HomeScreen extends Component {
   constructor(props) {
@@ -55,6 +57,14 @@ class HomeScreen extends Component {
         icon={this.MenuIcon}
         onPress={() => this.openControlPanel()}
       />
+    );
+  }
+
+  _renderItem({item, index}) {
+    return (
+      <View style={styles.slide}>
+        <Text style={styles.title}>{item.title}</Text>
+      </View>
     );
   }
 

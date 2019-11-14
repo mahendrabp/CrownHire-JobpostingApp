@@ -1,20 +1,11 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  ToastAndroid,
-  Image,
-} from 'react-native';
-import {Button, Input, Layout, Icon, Text} from 'react-native-ui-kitten';
-import AsyncStorage from '@react-native-community/async-storage';
-import axios from 'axios';
-import {WaveIndicator} from 'react-native-indicators';
+
+import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import {Button, Icon} from 'react-native-ui-kitten';
+
 import notFoundImage from '../../assets/404notfound.png';
 
-class LoginScreen extends Component {
+class Company extends Component {
   render() {
     return (
       <>
@@ -32,7 +23,8 @@ class LoginScreen extends Component {
             />
           </View>
           <View>
-            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('HomeScreen')}>
               <Button>Kembali</Button>
             </TouchableOpacity>
           </View>
@@ -42,9 +34,6 @@ class LoginScreen extends Component {
   }
 }
 
-const StarIcon = style => <Icon {...style} name="log-in-outline" />;
-const EmailIcon = style => <Icon {...style} name="email" />;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -53,27 +42,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
-    marginBottom: 18,
-    color: '#4a4a4a',
-    fontFamily: 'Montserrat-Bold',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  button: {
-    marginVertical: 4,
-    marginHorizontal: 4,
-    marginTop: 24,
-  },
-  containerScrollView: {
-    paddingHorizontal: 12,
-  },
-  textDanger: {
-    color: '#f5365c',
-  },
-  textPurple: {
-    color: '#3C82FF',
-  },
 });
 
-export default LoginScreen;
+export default Company;

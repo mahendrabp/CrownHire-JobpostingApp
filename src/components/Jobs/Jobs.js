@@ -33,6 +33,8 @@ import Modal from 'react-native-modal';
 import {WaveIndicator} from 'react-native-indicators';
 import {NavigationEvents} from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
+import {Facebook as Loader} from 'react-content-loader/native';
+import {Footer, FooterTab} from 'native-base';
 
 class Jobs extends Component {
   constructor(props) {
@@ -102,7 +104,7 @@ class Jobs extends Component {
 
     await axios
       .get(
-        `http://localhost:5200/api/v1/jobs?name=&location&limit=5&page=1&sortby=updated_at&orderby=desc`,
+        `http://localhost:5200/api/v1/jobs?name=&location&limit=20&page=1&sortby=updated_at&orderby=desc`,
       )
       .then(res => {
         this.setState({
@@ -190,12 +192,11 @@ class Jobs extends Component {
           this.setState({
             data,
           });
-
-          ToastAndroid.show('Product has been deleted', ToastAndroid.LONG);
+          ToastAndroid.show('Pekerjaan telah di hapus', ToastAndroid.LONG);
         }
 
         if (res.data.status != 200) {
-          ToastAndroid.show('Something went wrong', ToastAndroid.LONG);
+          ToastAndroid.show('Ada yang salah', ToastAndroid.LONG);
         }
 
         this.setState({
@@ -240,15 +241,27 @@ class Jobs extends Component {
 
   _renderListJob = () => {
     if (this.state.isLoading) {
+      const array = [1, 2, 3, 4];
+
       return (
-        <View style={{alignItems: 'center', marginTop: 20}}>
-          <Spinner status="alternative" />
-        </View>
+        <Loader
+          height={140}
+          style={{
+            padding: 20,
+            alignContent: 'center',
+            justifyContent: 'center',
+            borderRadius: 8,
+            marginVertical: 20,
+            marginHorizontal: 10,
+            // elevation: 10,
+            backgroundColor: '#fff',
+          }}
+        />
       );
     } else if (this.state.status === '404') {
       return (
         <View style={{alignItems: 'center', marginTop: 20}}>
-          <Text>Not FOUNND</Text>
+          <Text>Pekerjaan Tidak ditemukan</Text>
         </View>
       );
     } else {
@@ -261,26 +274,28 @@ class Jobs extends Component {
             animationInTiming={400}
             animationOutTiming={200}>
             <View style={styles.modal}>
-              <Text category="h6" style={styles.modalTitle}>
-                Are you sure want to delete ?
+              <Text category="h6" style={{color: '#fff', marginBottom: 20}}>
+                mau menghapus pekerjaan ?
               </Text>
-              <View style={styles.modalFooter}>
+              <View>
                 {this.state.isLoadingDelete ? (
                   <WaveIndicator color="#409BF6" />
                 ) : (
                   <Button
                     style={styles.modalActionYes}
                     status="danger"
+                    style={{width: 150, marginBottom: 30}}
                     onPress={() => this.deleteJob()}>
-                    Yes, sure!
+                    Iya
                   </Button>
                 )}
                 <Button
                   style={styles.modalActionNo}
                   status="basic"
                   appearance="outline"
+                  style={{width: 150}}
                   onPress={() => this.toggleModalDelete()}>
-                  Cancel
+                  Batal
                 </Button>
               </View>
             </View>
@@ -452,18 +467,36 @@ class Jobs extends Component {
 
   _autoRender() {
     const {navigation} = this.props;
-    let data = [...this.state.data];
-    // console.log(this.state.data);
-    this.setState({
-      data: [...this.state.data, navigation.getParam('data')],
-    });
+    if (navigation.getParam('edited')) {
+      const jobIndex = this.state.data
+        .map(val => {
+          return val.id;
+        })
+        .indexOf(navigation.getParam('data').id);
+      // console.log(jobIndex);
+      let data = this.state.data;
+
+      data[jobIndex].name = navigation.getParam('data').name;
+      data[jobIndex].description = navigation.getParam('data').description;
+      data[jobIndex].salary = navigation.getParam('data').salary;
+      data[jobIndex].location = navigation.getParam('data').location;
+      data[jobIndex].category_id = navigation.getParam('data').category_id;
+      data[jobIndex].company_id = navigation.getParam('data').company_id;
+
+      this.setState({
+        data: data,
+      });
+    } else {
+      this.setState({
+        data: [...this.state.data, navigation.getParam('data')],
+      });
+    }
   }
 
   render() {
     return (
       <>
         <View style={styles.container}>
-          <NavigationEvents on={() => this._autoRender()} />
           <View
             style={{
               flexDirection: 'row',
@@ -473,7 +506,7 @@ class Jobs extends Component {
             <Input
               style={{flex: 1, marginRight: 2}}
               size="small"
-              placeholder="Search.."
+              placeholder="Cari.."
               value={this.state.search}
               icon={this._renderIconSearch}
               onIconPress={() => this.resetSearch()}
@@ -483,7 +516,7 @@ class Jobs extends Component {
             <Input
               style={{flex: 1, marginLeft: 2}}
               size="small"
-              placeholder="Location"
+              placeholder="Lokasi.."
               value={this.state.location}
               icon={this._renderIconSearch}
               onIconPress={() => this.resetSearch()}
@@ -494,6 +527,7 @@ class Jobs extends Component {
 
           <View style={{marginTop: 12}}>{this._renderListJob()}</View>
         </View>
+
         <FAB
           buttonColor="#409BF6"
           iconTextColor="#FFFFFF"
@@ -535,6 +569,11 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     marginHorizontal: 12,
     borderRadius: 12,
+  },
+  modal: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginVertical: 20,
   },
 });
 

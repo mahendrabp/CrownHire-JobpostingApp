@@ -29,7 +29,6 @@ const MainNavigator = createStackNavigator({
       header: null,
     },
   },
-
   DetailJobScreen: {
     screen: DetailJobScreen,
     navigationOptions: {

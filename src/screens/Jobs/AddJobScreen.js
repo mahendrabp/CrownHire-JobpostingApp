@@ -6,10 +6,12 @@ import {
   Dimensions,
   ScrollView,
   Picker,
+  ToastAndroid,
 } from 'react-native';
 import {Text, Input, Select, Button} from 'react-native-ui-kitten';
 import {WaveIndicator} from 'react-native-indicators';
 import axios from 'axios';
+import RNPickerSelect from 'react-native-picker-select';
 import rupiah from 'rupiah-format';
 
 class AddJobScreen extends Component {
@@ -29,6 +31,9 @@ class AddJobScreen extends Component {
       companies: [],
       current_category: {},
       isLoading: false,
+
+      isValid: '',
+      invalidMessage: '',
     };
   }
 
@@ -118,11 +123,10 @@ class AddJobScreen extends Component {
           this.props.navigation.navigate('Jobs', {
             data: res.data.data,
             // isEdit: true,
+            // data: [data, res.data.data],
           });
-
-          // this.setState({
-          //   isLoadingBtn: false,
-          // });
+          ToastAndroid.show('berhasil menambah pekerjaan', ToastAndroid.LONG);
+          this.getData();
         }
       })
       .catch(err => {
@@ -189,9 +193,70 @@ class AddJobScreen extends Component {
     await this.setState({});
   }
 
-  onChangeText(value) {
-    console.log(value);
+  onChangeText(val) {
+    console.log(val);
   }
+
+  onChangeName = value => {
+    if (value === null || value === '') {
+      this.setState({
+        name: value,
+        isValid: false,
+        invalidMessage: 'tidak boleh kosong',
+      });
+    } else {
+      this.setState({
+        name: value,
+        isValid: true,
+        invalidMessage: '',
+      });
+    }
+  };
+  onChangeLocation = value => {
+    if (value === null || value === '') {
+      this.setState({
+        location: value,
+        isValid: false,
+        invalidMessage: 'tidak boleh kosong',
+      });
+    } else {
+      this.setState({
+        location: value,
+        isValid: true,
+        invalidMessage: '',
+      });
+    }
+  };
+  onChangeDesc = value => {
+    if (value === null || value === '') {
+      this.setState({
+        description: value,
+        isValid: false,
+        invalidMessage: 'tidak boleh kosong',
+      });
+    } else {
+      this.setState({
+        description: value,
+        isValid: true,
+        invalidMessage: '',
+      });
+    }
+  };
+  onChangeSalary = value => {
+    if (value === null || value === '') {
+      this.setState({
+        salary: value,
+        isValid: false,
+        invalidMessage: 'tidak boleh kosong',
+      });
+    } else {
+      this.setState({
+        salary: value,
+        isValid: true,
+        invalidMessage: '',
+      });
+    }
+  };
 
   render() {
     const {navigation} = this.props;
@@ -206,23 +271,27 @@ class AddJobScreen extends Component {
             /> */}
             <View style={styles.card}>
               <Text category="h6" style={styles.cardTitle}>
-                Add Jobs
+                Tambah Pekerjaan
               </Text>
               <Input
                 style={styles.input}
                 size="small"
-                placeholder="Job"
-                label="Add Job"
-                onChangeText={val => this.setState({name: val})}
+                placeholder="Pekerjaan"
+                label="Tambah pekerjaan"
+                onChangeText={value => this.onChangeName(value)}
                 value={this.state.name}
+                status={this.state.isValid ? '' : 'danger'}
+                caption={this.state.isValid ? '' : this.state.invalidMessage}
               />
               <Input
                 style={styles.input}
                 size="small"
-                placeholder="Location"
-                label="Location"
-                onChangeText={val => this.setState({location: val})}
+                placeholder="Lokasi"
+                label="Lokasi"
+                onChangeText={value => this.onChangeLocation(value)}
                 value={this.state.location}
+                status={this.state.isValid ? '' : 'danger'}
+                caption={this.state.isValid ? '' : this.state.invalidMessage}
               />
               {/* <Select
                 label="Category"
@@ -231,10 +300,11 @@ class AddJobScreen extends Component {
                 placeholder="Active"
                 selectedOption={{halo: 'test'}}
                 onSelect={data => this.handleSelectCategory(data)}></Select> */}
+              <Text>Pilih Kategori</Text>
               <Picker
                 selectedValue={this.state.category_id}
-                label="select category"
-                style={{height: 50, width: 100}}
+                label="pilih kategori"
+                style={{height: 50, width: 300}}
                 onValueChange={(itemValue, itemIndex) =>
                   this.setState({category_id: itemValue})
                 }>
@@ -246,10 +316,11 @@ class AddJobScreen extends Component {
                   />
                 ))}
               </Picker>
+              <Text>Pilih Perusahaan</Text>
               <Picker
                 selectedValue={this.state.company_id}
-                label="select company"
-                style={{height: 50, width: 100}}
+                label="pilih peruhaaan company"
+                style={{height: 50, width: 300}}
                 onValueChange={(itemValue, itemIndex) =>
                   this.setState({company_id: itemValue})
                 }>
@@ -265,10 +336,12 @@ class AddJobScreen extends Component {
                 keyboardType="numeric"
                 style={styles.input}
                 size="small"
-                placeholder="Salary"
-                label="Salary"
-                onChangeText={val => this.setState({salary: val})}
+                placeholder="Gaji"
+                label="Gaji"
                 value={`${this.state.salary}`}
+                onChangeText={value => this.onChangeSalary(value)}
+                status={this.state.isValid ? '' : 'danger'}
+                caption={this.state.isValid ? '' : this.state.invalidMessage}
               />
               {/* <Input
                 keyboardType="numeric"
@@ -284,10 +357,12 @@ class AddJobScreen extends Component {
                 size="small"
                 placeholder="Description"
                 label="Description"
-                onChangeText={val => this.setState({description: val})}
+                onChangeText={value => this.onChangeDesc(value)}
                 value={this.state.description}
                 multiline
                 numberOfLines={3}
+                status={this.state.isValid ? '' : 'danger'}
+                caption={this.state.isValid ? '' : this.state.invalidMessage}
               />
               {this.state.isLoading ? (
                 <WaveIndicator color="#f24f71" />

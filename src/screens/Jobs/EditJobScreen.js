@@ -6,6 +6,7 @@ import {
   Dimensions,
   ScrollView,
   Picker,
+  ToastAndroid,
 } from 'react-native';
 import {Text, Input, Select, Button} from 'react-native-ui-kitten';
 import {WaveIndicator} from 'react-native-indicators';
@@ -129,7 +130,7 @@ class EditJobScreen extends Component {
         if (res.data.status === 200) {
           this.props.navigation.navigate('Jobs', {
             data: res.data.data,
-            // isEdit: true,
+            edited: true,
           });
 
           // this.setState({
