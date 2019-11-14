@@ -1,13 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
 // import Drawer from 'react-native-drawer';
-import {
-  Drawer,
-  Icon,
-  DrawerHeaderFooter,
-  Button,
-  Layout,
-} from 'react-native-ui-kitten';
+import {Drawer, Icon, DrawerHeaderFooter, Layout} from 'react-native-ui-kitten';
 import AsyncStorage from '@react-native-community/async-storage';
 
 class DrawerContent extends Component {

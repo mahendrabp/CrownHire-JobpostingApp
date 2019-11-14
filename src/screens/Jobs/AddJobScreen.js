@@ -126,7 +126,6 @@ class AddJobScreen extends Component {
             // data: [data, res.data.data],
           });
           ToastAndroid.show('berhasil menambah pekerjaan', ToastAndroid.LONG);
-          this.getData();
         }
       })
       .catch(err => {
@@ -365,7 +364,7 @@ class AddJobScreen extends Component {
                 caption={this.state.isValid ? '' : this.state.invalidMessage}
               />
               {this.state.isLoading ? (
-                <WaveIndicator color="#f24f71" />
+                <WaveIndicator color="#3C82FF" />
               ) : (
                 <Button
                   status="primary"

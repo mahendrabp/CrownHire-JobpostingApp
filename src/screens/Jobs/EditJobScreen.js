@@ -131,7 +131,7 @@ class EditJobScreen extends Component {
             data: res.data.data,
             edited: true,
           });
-
+          ToastAndroid.show('berhasil mengedit', ToastAndroid.LONG);
           // this.setState({
           //   isLoadingBtn: false,
           // });
@@ -243,10 +243,11 @@ class EditJobScreen extends Component {
                 placeholder="Active"
                 selectedOption={{halo: 'test'}}
                 onSelect={data => this.handleSelectCategory(data)}></Select> */}
+              <Text>Pilih Kategori</Text>
               <Picker
                 selectedValue={this.state.category_id}
                 label="select category"
-                style={{height: 50, width: 100}}
+                style={{height: 50, width: 300}}
                 onValueChange={(itemValue, itemIndex) =>
                   this.setState({category_id: itemValue})
                 }>
@@ -258,10 +259,12 @@ class EditJobScreen extends Component {
                   />
                 ))}
               </Picker>
+
+              <Text>Pilih Perusahaan</Text>
               <Picker
                 selectedValue={this.state.company_id}
                 label="select company"
-                style={{height: 50, width: 100}}
+                style={{height: 50, width: 300}}
                 onValueChange={(itemValue, itemIndex) =>
                   this.setState({company_id: itemValue})
                 }>
@@ -280,7 +283,8 @@ class EditJobScreen extends Component {
                 placeholder="Salary"
                 label="Salary"
                 onChangeText={val => this.setState({salary: val})}
-                value={rupiah.convert(this.state.salary)}
+                // value={rupiah.convert(this.state.salary)}
+                value={`${this.state.salary}`}
               />
               {/* <Input
                 keyboardType="numeric"
@@ -302,7 +306,7 @@ class EditJobScreen extends Component {
                 numberOfLines={3}
               />
               {this.state.isLoading ? (
-                <WaveIndicator color="#f24f71" />
+                <WaveIndicator color="#3C82FF" />
               ) : (
                 <Button
                   status="primary"

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
+
 import {
   View,
   StyleSheet,
@@ -8,7 +8,7 @@ import {
   ToastAndroid,
   Image,
 } from 'react-native';
-import {Button, Input, Layout, Icon, Text} from 'react-native-ui-kitten';
+import {Button, Input, Icon, Text} from 'react-native-ui-kitten';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import {WaveIndicator} from 'react-native-indicators';

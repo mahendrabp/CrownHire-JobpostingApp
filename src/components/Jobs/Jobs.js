@@ -7,6 +7,7 @@ import {
   RefreshControl,
   Image,
   ScrollView,
+  Alert,
 } from 'react-native';
 import {Text, Button, Icon, Input, Spinner} from 'react-native-ui-kitten';
 import axios from 'axios';
@@ -19,6 +20,7 @@ import rupiah from 'rupiah-format';
 import FAB from 'react-native-fab';
 import Modal from 'react-native-modal';
 import {WaveIndicator} from 'react-native-indicators';
+import {NavigationEvents} from 'react-navigation';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import {Facebook as Loader} from 'react-content-loader/native';
@@ -51,7 +53,7 @@ class Jobs extends Component {
       name: '',
       description: '',
       salary: '',
-      location: '',
+
       logo: '',
 
       category_id: 1,
@@ -215,6 +217,7 @@ class Jobs extends Component {
     });
     this.getJob();
   }
+
   resetLocation() {
     this.setState({
       location: '',
@@ -485,13 +488,24 @@ class Jobs extends Component {
       <>
         <View style={styles.container}>
           <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              margin: 3,
-            }}>
+            style={
+              {
+                // flexDirection: 'row',
+                // justifyContent: 'space-between',
+                // margin: 3,
+              }
+            }>
             <Input
-              style={{flex: 1, marginRight: 2}}
+              style={{
+                width: '100%',
+                paddingHorizontal: 5,
+                borderRadius: 10,
+                marginTop: 20,
+                alignSelf: 'center',
+                backgroundColor: '#fff',
+                borderColor: '#fff',
+                elevation: 5,
+              }}
               size="small"
               placeholder="Cari.."
               value={this.state.search}
@@ -500,18 +514,31 @@ class Jobs extends Component {
               onChangeText={val => this.setState({search: val})}
               onSubmitEditing={event => this.searchJob(event)}
             />
+          </View>
+          <View>
             <Input
-              style={{flex: 1, marginLeft: 2}}
+              style={{
+                width: '100%',
+                paddingHorizontal: 5,
+                borderRadius: 10,
+                marginTop: 20,
+                alignSelf: 'center',
+                backgroundColor: '#fff',
+                borderColor: '#fff',
+                elevation: 5,
+              }}
               size="small"
               placeholder="Lokasi.."
               value={this.state.location}
               icon={this._renderIconSearch}
-              onIconPress={() => this.resetSearch()}
+              onIconPress={() => this.resetLocation()}
               onChangeText={val => this.setState({location: val})}
               onSubmitEditing={event => this.searchLocation(event)}
             />
           </View>
-
+          <View>
+            <NavigationEvents onWillFocus={() => this.getJob()} />
+          </View>
           <View style={{marginTop: 12}}>{this._renderListJob()}</View>
         </View>
 

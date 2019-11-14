@@ -5,7 +5,7 @@ import RegisterScreen from './screens/RegisterScreen';
 import HomeScreen from './screens/HomeScreen';
 import Jobs from './components/Jobs/Jobs';
 import EditJobScreen from './screens/Jobs/EditJobScreen';
-import WelcomeScreen from './screens/WelcomeScreen';
+// import WelcomeScreen from './screens/WelcomeScreen';
 import DetailJobScreen from './screens/Jobs/DetailJobScreen';
 import AddJobScreen from './screens/Jobs/AddJobScreen';
 import Company from './screens/Companies/Company';
