@@ -2,7 +2,17 @@ import React, {Component} from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
 import {Button, Icon, Input, Spinner} from 'react-native-ui-kitten';
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
-import {H2, H3, Header, CardItem, Card} from 'native-base';
+import {
+  Container,
+  Header,
+  Content,
+  Card,
+  CardItem,
+  Thumbnail,
+  Left,
+  Body,
+  Right,
+} from 'native-base';
 import rupiah from 'rupiah-format';
 
 class DetailCompanyScreen extends Component {
@@ -30,53 +40,40 @@ class DetailCompanyScreen extends Component {
   }
   render() {
     return (
-      <View>
-        <Text>{this.state.name}</Text>
-      </View>
+      <Container style={{marginTop: 50}}>
+        <Content>
+          <Card>
+            <CardItem>
+              <Left>
+                <Thumbnail
+                  source={{
+                    uri: `http://localhost:5200/public/logo/${this.state.logo}`,
+                  }}
+                />
+                <Body>
+                  <Text>{this.state.name}</Text>
+                  <Text note>{this.state.location}</Text>
+                </Body>
+              </Left>
+            </CardItem>
+            <CardItem cardBody>
+              <Image
+                source={{
+                  uri: `http://localhost:5200/public/logo/${this.state.logo}`,
+                }}
+                style={{height: 200, width: null, flex: 1}}
+              />
+            </CardItem>
+            <CardItem>
+              <View>
+                <Text>{this.state.description}</Text>
+              </View>
+            </CardItem>
+          </Card>
+        </Content>
+      </Container>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  line: {
-    width: '100%',
-    height: 2,
-    backgroundColor: '#ccc',
-    // marginVertical: 5,
-  },
-  title: {
-    color: '#fff',
-    width: '100%',
-    padding: 10,
-    textShadowColor: 'rgba(0, 0, 0, 0.8)',
-    textShadowOffset: {width: -1, height: 2},
-    textShadowRadius: 20,
-    fontWeight: 'bold',
-    // backgroundColor: 'rgba(255, 255, 255, 0.5)',
-    fontSize: 22,
-    textAlign: 'center',
-    fontFamily: 'Poppins-Regular',
-  },
-  content: {
-    marginTop: -5,
-    // alignItems: 'center',
-    marginHorizontal: 20,
-  },
-  btnAction: {
-    padding: 0,
-    marginVertical: 25,
-    marginHorizontal: 5,
-    borderRadius: 8,
-  },
-  textCompany: {
-    fontFamily: 'Poppins-Regular',
-    fontSize: 18,
-  },
-  textDescription: {
-    fontFamily: 'Poppins-Light',
-    fontSize: 15,
-    marginBottom: 10,
-  },
-});
 
 export default DetailCompanyScreen;

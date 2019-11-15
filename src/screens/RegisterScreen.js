@@ -83,6 +83,13 @@ class RegisterScreen extends Component {
             console.log(response);
             // AsyncStorage.setItem('token', response.data.token);
             this.props.navigation.navigate('Login');
+            ToastAndroid.showWithGravityAndOffset(
+              'Berhasil mendaftar',
+              ToastAndroid.LONG,
+              ToastAndroid.BOTTOM,
+              25,
+              50,
+            );
             this.setState({
               isLoading: false,
             });

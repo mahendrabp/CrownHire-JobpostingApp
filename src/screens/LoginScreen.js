@@ -87,8 +87,16 @@ class LoginScreen extends Component {
           // console.log(response);
           if (response.data.status == 200) {
             // console.log(response);
+
             AsyncStorage.setItem('token', response.data.token);
             this.props.navigation.navigate('Home');
+            ToastAndroid.showWithGravityAndOffset(
+              'Selamat Datang!',
+              ToastAndroid.LONG,
+              ToastAndroid.BOTTOM,
+              25,
+              50,
+            );
             this.setState({
               isLoading: false,
             });
@@ -98,7 +106,7 @@ class LoginScreen extends Component {
           // console.log(error);
           this.setState({isLoading: false});
           ToastAndroid.showWithGravityAndOffset(
-            'Invalid Username/Password!',
+            'Email/Password tidak valid',
             ToastAndroid.LONG,
             ToastAndroid.BOTTOM,
             25,
