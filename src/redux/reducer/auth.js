@@ -1,22 +1,29 @@
 const initialState = {
-  isAuthenticate: false,
-  user: {
-    email: '',
-  },
+  user: {},
+  token: null,
+  loggedIn: false,
+  isLoading: false,
 };
 
 const auth = (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_USER':
+    case 'LOGIN_USER_PENDING':
       return {
         ...state,
-        user: state.user,
+        isLoading: true,
       };
-    case 'AUTHENTICATED':
+    case 'LOGIN_USER_FULFILLED':
       return {
         ...state,
-        isAuthenticate: true,
-        user: action.payload,
+        isLoading: false,
+        loggedIn: true,
+        user: action.payload.data.user,
+        token: action.payload.data.token,
+      };
+    case 'LOGIN_USER_REJECTED':
+      return {
+        ...state,
+        isLoading: false,
       };
     default:
       return state;

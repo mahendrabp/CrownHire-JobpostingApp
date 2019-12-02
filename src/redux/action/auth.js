@@ -1,13 +1,24 @@
-export const authenticate = user => {
+import axios from 'axios';
+
+const URI =
+  'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/users/';
+
+export const loginUser = data => {
   return {
-    type: 'AUTHENTICATED',
-    payload: user,
+    type: 'LOGIN_USER',
+
+    payload: new Promise((resolve, reject) => {
+      axios
+        .post(URI + 'login', data)
+        .then(({data: result}) => resolve(result))
+        .catch(err => reject(err));
+    }),
   };
 };
 
-export const getUser = () => {
+export const registerUser = data => {
   return {
-    type: 'GET_USER',
-    payload: {},
+    type: 'REGISTER_USER',
+    payload: axios.post(URI + 'register', data),
   };
 };
