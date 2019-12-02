@@ -93,7 +93,7 @@ class Jobs extends Component {
 
     await axios
       .get(
-        `http://localhost:5200/api/v1/jobs?name=&location&limit=20&page=1&sortby=updated_at&orderby=desc`,
+        `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs?name=&location&limit=20&page=1&sortby=updated_at&orderby=desc`,
       )
       .then(res => {
         this.setState({
@@ -116,7 +116,7 @@ class Jobs extends Component {
     });
     await axios
       .get(
-        `http://localhost:5200/api/v1/jobs?name=${event.nativeEvent.text}&location=${this.state.location}&limit=100&page=1&sortby=updated_at&orderby=desc`,
+        `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs?name=${event.nativeEvent.text}&location=${this.state.location}&limit=100&page=1&sortby=updated_at&orderby=desc`,
       )
       .then(res => {
         console.log(res.data.data.result);
@@ -141,7 +141,7 @@ class Jobs extends Component {
     });
     await axios
       .get(
-        `http://localhost:5200/api/v1/jobs?name=${this.state.search}&location=${event.nativeEvent.text}&limit=100&page=1&sortby=updated_at&orderby=desc`,
+        `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs?name=${this.state.search}&location=${event.nativeEvent.text}&limit=100&page=1&sortby=updated_at&orderby=desc`,
       )
       .then(res => {
         // console.log(res.data.data.result);
@@ -164,7 +164,7 @@ class Jobs extends Component {
       isLoadingDelete: true,
     });
     await axios
-      .delete(`http://localhost:5200/api/v1/jobs/${this.state.deleteJobId}`)
+      .delete(`http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs/${this.state.deleteJobId}`)
       .then(res => {
         // console.log(res);
 
@@ -360,7 +360,7 @@ class Jobs extends Component {
                           <View>
                             <Image
                               source={{
-                                uri: `http://localhost:5200/public/logo/${item.logo}`,
+                                uri: `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/public/logo/${item.logo}`,
                               }}
                               style={{
                                 height: 80,

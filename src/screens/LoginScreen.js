@@ -63,7 +63,8 @@ class LoginScreen extends Component {
   onSignIn = () => {
     this.setState({isLoading: true});
     const {email, password} = this.state;
-    const url = 'http://localhost:5200/api/v1/users/login';
+    const url =
+      'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/users/login';
     const payload = {
       email,
       password,

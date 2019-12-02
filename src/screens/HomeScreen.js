@@ -52,7 +52,7 @@ class HomeScreen extends Component {
 
     await axios
       .get(
-        `http://localhost:5200/api/v1/jobs?name=&location&limit=5&page=1&sortby=updated_at&orderby=desc`,
+        `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs?name=&location&limit=5&page=1&sortby=updated_at&orderby=desc`,
       )
       .then(res => {
         this.setState({
@@ -290,7 +290,7 @@ class HomeScreen extends Component {
                             <View>
                               <Image
                                 source={{
-                                  uri: `http://localhost:5200/public/logo/${v.logo}`,
+                                  uri: `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/public/logo/${v.logo}`,
                                 }}
                                 style={{
                                   height: 40,

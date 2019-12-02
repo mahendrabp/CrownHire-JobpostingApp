@@ -47,7 +47,7 @@ class DetailCompanyScreen extends Component {
               <Left>
                 <Thumbnail
                   source={{
-                    uri: `http://localhost:5200/public/logo/${this.state.logo}`,
+                    uri: `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/public/logo/${this.state.logo}`,
                   }}
                 />
                 <Body>
@@ -59,7 +59,7 @@ class DetailCompanyScreen extends Component {
             <CardItem cardBody>
               <Image
                 source={{
-                  uri: `http://localhost:5200/public/logo/${this.state.logo}`,
+                  uri: `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/public/logo/${this.state.logo}`,
                 }}
                 style={{height: 200, width: null, flex: 1}}
               />

@@ -39,7 +39,7 @@ class Company extends Component {
   }
 
   async getCompany() {
-    const url = 'http://localhost:5200/api/v1/companies';
+    const url = 'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/companies';
     await axios
       .get(url)
       .then(result => {
@@ -87,7 +87,7 @@ class Company extends Component {
                   <CardItem cardBody style={{flex: 1}}>
                     <Image
                       source={{
-                        uri: `http://localhost:5200/public/logo/${v.logo}`,
+                        uri: `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/public/logo/${v.logo}`,
                       }}
                       style={{height: 100, width: 100, flex: 1}}
                     />
@@ -105,7 +105,7 @@ class Company extends Component {
                   <Left>
                     <Thumbnail
                       source={{
-                        uri: `http://localhost:5200/public/logo/`,
+                        uri: `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/public/logo/`,
                       }}
                     />
                     <Body>
@@ -117,7 +117,7 @@ class Company extends Component {
                 <CardItem cardBody>
                   <Image
                     source={{
-                      uri: `http://localhost:5200/public/logo/`,
+                      uri: `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/public/logo/`,
                     }}
                     style={{height: 200, width: null, flex: 1}}
                   />

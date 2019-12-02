@@ -57,7 +57,7 @@ class RegisterScreen extends Component {
   onSignUp = () => {
     this.setState({isLoading: true});
     const {email, password} = this.state;
-    const url = 'http://localhost:5200/api/v1/users/register';
+    const url = 'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/users/register';
     const payload = {
       email,
       password,
@@ -112,7 +112,7 @@ class RegisterScreen extends Component {
   // onSignUp = () => {
   //   this.setState({isLoading: true});
   //   const {email, password} = this.state;
-  //   const url = 'http://localhost:5200/api/v1/users/register';
+  //   const url = 'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/users/register';
   //   const payload = {
   //     email,
   //     password,
