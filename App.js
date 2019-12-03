@@ -7,24 +7,16 @@
  */
 
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+// import {
+//   Header,
+//   LearnMoreLinks,
+//   Colors,
+//   DebugInstructions,
+//   ReloadInstructions,
+// } from 'react-native/Libraries/NewAppScreen';
 import {Provider} from 'react-redux';
-import Store from './src/redux/store';
+import store from './src/redux/store';
 import NavigatorApp from './src/NavigatorApp';
 import {mapping, light as lightTheme} from '@eva-design/eva';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
@@ -39,13 +31,12 @@ class App extends Component {
     return (
       <>
         {/* <StatusBar barStyle="dark-content" /> */}
-        {/* <Provider store={Store}> */}
-        <IconRegistry icons={EvaIconsPack} />
-        <ApplicationProvider mapping={mapping} theme={lightTheme}>
-          <NavigatorApp />
-        </ApplicationProvider>
-
-        {/* </Provider> */}
+        <Provider store={store}>
+          <IconRegistry icons={EvaIconsPack} />
+          <ApplicationProvider mapping={mapping} theme={lightTheme}>
+            <NavigatorApp />
+          </ApplicationProvider>
+        </Provider>
       </>
     );
   }

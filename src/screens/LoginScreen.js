@@ -13,6 +13,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import {WaveIndicator} from 'react-native-indicators';
 import imageLogin from '../assets/characterLogin.png';
+import {connect} from 'react-redux';
+import {loginUser} from '../redux/action/auth';
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -60,60 +62,119 @@ class LoginScreen extends Component {
     this.setState({password: value});
   };
 
+  // handleLogin = (email, password) => {
+  //   console.log(Http.defaults.baseURL);
+  //   dispatch(login({email, password}))
+  //     .then(({value: {data}}) => {
+  //       Http.defaults.headers.common.authorization = `Bearer ${data.token}`;
+  //       Toast.show({
+  //         text: 'Success Logged In!',
+  //         type: 'success',
+  //       });
+  //       navigation.replace('Home');
+  //     })
+  //     .catch(err => {
+  //       setPassword('');
+  //       Toast.show({
+  //         text:
+  //           err.message === 'Network Error'
+  //             ? "Network Error: Your connection can't be established."
+  //             : `Can't login, ${err.response.data.message}`,
+  //         type: 'danger',
+  //       });
+  //     });
+  // };
+
   onSignIn = () => {
     this.setState({isLoading: true});
     const {email, password} = this.state;
-    const url =
-      'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/users/login';
-    const payload = {
-      email,
-      password,
-    };
+    // const url =
+    //   'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/users/login';
+    // const payload = {
+    //   email,
+    //   password,
+    // };
 
     setTimeout(async () => {
-      await axios
-        .post(url, payload)
-        .then(response => {
+      try {
+        await this.props.dispatch(loginUser({email, password}));
+        if (this.props.auth.status == 500 || this.props.auth.status == 400) {
+          ToastAndroid.show(
+            this.props.auth.message,
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+          );
+          this.setState({
+            isLoading: false,
+          });
+        }
+        if (this.props.auth.status == 200) {
           // console.log(response);
-          if (response.data.status == 500 || response.data.status == 400) {
-            ToastAndroid.show(
-              response.data.message,
-              ToastAndroid.LONG,
-              ToastAndroid.BOTTOM,
-            );
-            this.setState({
-              isLoading: false,
-            });
-          }
-          // console.log(response);
-          if (response.data.status == 200) {
-            // console.log(response);
-
-            AsyncStorage.setItem('token', response.data.token);
-            this.props.navigation.navigate('Home');
-            ToastAndroid.showWithGravityAndOffset(
-              'Selamat Datang!',
-              ToastAndroid.LONG,
-              ToastAndroid.BOTTOM,
-              25,
-              50,
-            );
-            this.setState({
-              isLoading: false,
-            });
-          }
-        })
-        .catch(error => {
-          // console.log(error);
-          this.setState({isLoading: false});
+          AsyncStorage.setItem('token', this.props.auth.token);
+          this.props.navigation.navigate('Home');
           ToastAndroid.showWithGravityAndOffset(
-            'Email/Password tidak valid',
+            'Selamat Datang!',
             ToastAndroid.LONG,
             ToastAndroid.BOTTOM,
             25,
             50,
           );
-        });
+          this.setState({
+            isLoading: false,
+          });
+        }
+      } catch (error) {
+        this.setState({isLoading: false});
+        ToastAndroid.showWithGravityAndOffset(
+          'Email/Password tidak valid',
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          50,
+        );
+      }
+      // await axios
+      //   .post(url, payload)
+      //   .then(response => {
+      //     // console.log(response);
+      //     if (response.data.status == 500 || response.data.status == 400) {
+      //       ToastAndroid.show(
+      //         response.data.message,
+      //         ToastAndroid.LONG,
+      //         ToastAndroid.BOTTOM,
+      //       );
+      //       this.setState({
+      //         isLoading: false,
+      //       });
+      //     }
+      //     // console.log(response);
+      //     if (response.data.status == 200) {
+      //       // console.log(response);
+      //       AsyncStorage.setItem('token', response.data.token);
+      //       this.props.navigation.navigate('Home');
+      //       ToastAndroid.showWithGravityAndOffset(
+      //         'Selamat Datang!',
+      //         ToastAndroid.LONG,
+      //         ToastAndroid.BOTTOM,
+      //         25,
+      //         50,
+      //       );
+      //       this.setState({
+      //         isLoading: false,
+      //       });
+      //     }
+      //   })
+      //   .catch(error => {
+      //     // console.log(error);
+      //     this.setState({isLoading: false});
+      //     ToastAndroid.showWithGravityAndOffset(
+      //       'Email/Password tidak valid',
+      //       ToastAndroid.LONG,
+      //       ToastAndroid.BOTTOM,
+      //       25,
+      //       50,
+      //     );
+      //   });
     }, 1000);
   };
 
@@ -248,4 +309,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+const mapStateToProps = state => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps)(LoginScreen);

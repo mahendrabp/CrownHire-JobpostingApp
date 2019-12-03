@@ -6,13 +6,7 @@ const URI =
 export const loginUser = data => {
   return {
     type: 'LOGIN_USER',
-
-    payload: new Promise((resolve, reject) => {
-      axios
-        .post(URI + 'login', data)
-        .then(({data: result}) => resolve(result))
-        .catch(err => reject(err));
-    }),
+    payload: axios.post(URI + 'login', data),
   };
 };
 

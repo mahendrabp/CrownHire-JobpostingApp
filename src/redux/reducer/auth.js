@@ -3,6 +3,8 @@ const initialState = {
   token: null,
   loggedIn: false,
   isLoading: false,
+  message: '',
+  status: '',
 };
 
 const auth = (state = initialState, action) => {
@@ -17,13 +19,15 @@ const auth = (state = initialState, action) => {
         ...state,
         isLoading: false,
         loggedIn: true,
-        user: action.payload.data.user,
         token: action.payload.data.token,
+        status: action.payload.data.status,
       };
     case 'LOGIN_USER_REJECTED':
       return {
         ...state,
         isLoading: false,
+        message: action.payload.response.data.message,
+        status: action.payload.response.data.status,
       };
     default:
       return state;
