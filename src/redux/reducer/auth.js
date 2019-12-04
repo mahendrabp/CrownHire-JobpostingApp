@@ -15,6 +15,7 @@ const auth = (state = initialState, action) => {
         isLoading: true,
       };
     case 'LOGIN_USER_FULFILLED':
+      console.log(action.payload);
       return {
         ...state,
         isLoading: false,
@@ -23,6 +24,26 @@ const auth = (state = initialState, action) => {
         status: action.payload.data.status,
       };
     case 'LOGIN_USER_REJECTED':
+      console.log(action.payload.response);
+      return {
+        ...state,
+        isLoading: false,
+        message: action.payload.response.data.message,
+        status: action.payload.response.data.status,
+      };
+    case 'REGISTER_USER_PENDING':
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case 'REGISTER_USER_FULFILLED':
+      return {
+        ...state,
+        isLoading: false,
+        loggedIn: true,
+        status: action.payload.data.status,
+      };
+    case 'REGISTER_USER_REJECTED':
       return {
         ...state,
         isLoading: false,

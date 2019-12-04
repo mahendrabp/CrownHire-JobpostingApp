@@ -12,6 +12,8 @@ import {Button, Text, Input, Icon} from 'react-native-ui-kitten';
 import {WaveIndicator} from 'react-native-indicators';
 import axios from 'axios';
 import imageRegist from '../assets/characterRegist.png';
+import {connect} from 'react-redux';
+import {registerUser} from '../redux/action/auth';
 
 class RegisterScreen extends Component {
   constructor(props) {
@@ -57,55 +59,92 @@ class RegisterScreen extends Component {
   onSignUp = () => {
     this.setState({isLoading: true});
     const {email, password} = this.state;
-    const url = 'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/users/register';
-    const payload = {
-      email,
-      password,
-    };
+    // const url =
+    //   'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/users/register';
+    // const payload = {
+    //   email,
+    //   password,
+    // };
 
-    setTimeout(() => {
-      axios
-        .post(url, payload)
-        .then(response => {
-          console.log(response);
-          if (response.data.status != 200) {
-            ToastAndroid.show(
-              response.data.message,
-              ToastAndroid.LONG,
-              ToastAndroid.BOTTOM,
-            );
-            this.setState({
-              isLoading: false,
-            });
-          }
-
-          if (response.data.status == 200) {
-            console.log(response);
-            // AsyncStorage.setItem('token', response.data.token);
-            this.props.navigation.navigate('Login');
-            ToastAndroid.showWithGravityAndOffset(
-              'Berhasil mendaftar',
-              ToastAndroid.LONG,
-              ToastAndroid.BOTTOM,
-              25,
-              50,
-            );
-            this.setState({
-              isLoading: false,
-            });
-          }
-        })
-        .catch(error => {
-          console.log(error);
-          this.setState({isLoading: false});
+    setTimeout(async () => {
+      try {
+        await this.props.dispatch(registerUser({email, password}));
+        if (this.props.auth.status != 200) {
+          ToastAndroid.show(
+            this.props.auth.message,
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+          );
+          this.setState({
+            isLoading: false,
+          });
+        }
+        if (this.props.auth.status == 200) {
+          // console.log(response);
+          // AsyncStorage.setItem('token', response.data.token);
+          this.props.navigation.navigate('Login');
           ToastAndroid.showWithGravityAndOffset(
-            'Invalid Username/Password!',
+            'Berhasil mendaftar',
             ToastAndroid.LONG,
             ToastAndroid.BOTTOM,
             25,
             50,
           );
-        });
+          this.setState({
+            isLoading: false,
+          });
+        }
+      } catch (error) {
+        this.setState({isLoading: false});
+        ToastAndroid.showWithGravityAndOffset(
+          this.props.auth.message,
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          50,
+        );
+      }
+      // axios
+      //   .post(url, payload)
+      //   .then(response => {
+      //     console.log(response);
+      //     if (response.data.status != 200) {
+      //       ToastAndroid.show(
+      //         response.data.message,
+      //         ToastAndroid.LONG,
+      //         ToastAndroid.BOTTOM,
+      //       );
+      //       this.setState({
+      //         isLoading: false,
+      //       });
+      //     }
+      //     if (response.data.status == 200) {
+      //       console.log(response);
+      //       // AsyncStorage.setItem('token', response.data.token);
+      //       this.props.navigation.navigate('Login');
+      //       ToastAndroid.showWithGravityAndOffset(
+      //         'Berhasil mendaftar',
+      //         ToastAndroid.LONG,
+      //         ToastAndroid.BOTTOM,
+      //         25,
+      //         50,
+      //       );
+      //       this.setState({
+      //         isLoading: false,
+      //       });
+      //     }
+      //   })
+      //   .catch(error => {
+      //     console.log(error);
+      //     this.setState({isLoading: false});
+      //     ToastAndroid.showWithGravityAndOffset(
+      //       'Invalid Username/Password!',
+      //       ToastAndroid.LONG,
+      //       ToastAndroid.BOTTOM,
+      //       25,
+      //       50,
+      //     );
+      //   });
     }, 1000);
   };
 
@@ -260,4 +299,8 @@ const styles = StyleSheet.create({
     color: '#3C82FF',
   },
 });
-export default RegisterScreen;
+const mapStateToProps = state => ({
+  auth: state.auth,
+});
+
+export default connect(mapStateToProps)(RegisterScreen);

@@ -46,7 +46,7 @@ class LoginScreen extends Component {
 
     if (validationRegex.test(value) === false) {
       this.setState({
-        email: value,
+        email: value.toLowerCase(),
         isEmailValid: false,
         invalidMessage: 'email tidak valid',
       });
@@ -126,7 +126,7 @@ class LoginScreen extends Component {
       } catch (error) {
         this.setState({isLoading: false});
         ToastAndroid.showWithGravityAndOffset(
-          'Email/Password tidak valid',
+          this.props.auth.message,
           ToastAndroid.LONG,
           ToastAndroid.BOTTOM,
           25,
