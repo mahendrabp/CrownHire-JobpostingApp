@@ -44,6 +44,9 @@ const MainNavigator = createStackNavigator({
   },
   Company: {
     screen: Company,
+    navigationOptions: {
+      header: null,
+    },
   },
   DetailCompanyScreen: {
     screen: DetailCompanyScreen,
