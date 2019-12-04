@@ -11,6 +11,10 @@ import {
 import {Text, Input, Button} from 'react-native-ui-kitten';
 import {WaveIndicator} from 'react-native-indicators';
 import axios from 'axios';
+import {connect} from 'react-redux';
+import {addJobRedux} from '../../redux/action/job';
+import {getCategoryRedux} from '../../redux/action/category';
+import {getCompanyRedux} from '../../redux/action/company';
 
 import rupiah from 'rupiah-format';
 
@@ -109,7 +113,10 @@ class AddJobScreen extends Component {
     // console.log(name, description, category_id);
 
     await axios
-      .post(`http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs/`, formData)
+      .post(
+        `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs/`,
+        formData,
+      )
       .then(res => {
         // console.log(res.data.data);
         if (res.data.status !== 200) {
@@ -137,24 +144,31 @@ class AddJobScreen extends Component {
   }
 
   async dataCategory() {
-    const url = 'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/categories';
-    await axios
-      .get(url)
-      .then(result => {
-        const dataCategory = result.data.data;
-        // console.log(result.data.data);
-        this.setState({
-          categories: dataCategory,
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    try {
+      await this.props.dispatch(getCategoryRedux());
+      // this.setState({
+
+      // });
+    } catch (error) {}
+    // const url =
+    //   'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/categories';
+    // await axios
+    //   .get(url)
+    //   .then(result => {
+    //     const dataCategory = result.data.data;
+    //     // console.log(result.data.data);
+    //     this.setState({
+    //       categories: dataCategory,
+    //     });
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
   }
 
   async currCategory() {
-    const current_category = this.state.categories.map(
-      category => category.id == navigation.getParam('category_id'),
+    const current_category = this.props.category.category.map(
+      category => category.id == this.props.navigation.getParam('category_id'),
     );
 
     await this.setState({
@@ -164,28 +178,35 @@ class AddJobScreen extends Component {
     // console.log(current_category);
   }
 
-  async handleSelectCategory(data) {
-    await this.setState({
-      category_id: data.id,
-      category: data.category,
-      current_category: data,
-    });
-  }
+  // async handleSelectCategory(data) {
+  //   await this.setState({
+  //     category_id: data.id,
+  //     category: data.category,
+  //     current_category: data,
+  //   });
+  // }
 
   async dataCompany() {
-    const url = 'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/companies';
-    await axios
-      .get(url)
-      .then(result => {
-        const dataCompany = result.data.data;
-        // console.log(result.data.data);
-        this.setState({
-          companies: dataCompany,
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    try {
+      await this.props.dispatch(getCompanyRedux());
+      // this.setState({
+
+      // });
+    } catch (error) {}
+    // const url =
+    //   'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/companies';
+    // await axios
+    //   .get(url)
+    //   .then(result => {
+    //     const dataCompany = result.data.data;
+    //     // console.log(result.data.data);
+    //     this.setState({
+    //       companies: dataCompany,
+    //     });
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
   }
 
   async handleSelectCompany(data) {
@@ -307,7 +328,7 @@ class AddJobScreen extends Component {
                 onValueChange={(itemValue, itemIndex) =>
                   this.setState({category_id: itemValue})
                 }>
-                {this.state.categories.map(v => (
+                {this.props.category.category.map(v => (
                   <Picker.Item
                     label={v.category}
                     value={v.id.toString()}
@@ -323,7 +344,7 @@ class AddJobScreen extends Component {
                 onValueChange={(itemValue, itemIndex) =>
                   this.setState({company_id: itemValue})
                 }>
-                {this.state.companies.map(v => (
+                {this.props.company.company.map(v => (
                   <Picker.Item
                     label={v.name}
                     value={v.id.toString()}
@@ -412,4 +433,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddJobScreen;
+const mapStateToProps = state => ({
+  job: state.job,
+  category: state.category,
+  company: state.company,
+});
+
+export default connect(mapStateToProps)(AddJobScreen);

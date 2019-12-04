@@ -24,6 +24,8 @@ import {NavigationEvents} from 'react-navigation';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import {Facebook as Loader} from 'react-content-loader/native';
+import {connect} from 'react-redux';
+import {getJobRedux} from '../../redux/action/job';
 
 class Jobs extends Component {
   constructor(props) {
@@ -86,77 +88,154 @@ class Jobs extends Component {
   //   console.log(token);
   // }
 
-  async getJob(search, location, limit, page, sortby, orderby) {
-    this.setState({
-      isLoading: true,
-    });
+  // async getJob(search, location, limit, page, sortby, orderby) {
+  //   this.setState({
+  //     isLoading: true,
+  //   });
 
-    await axios
-      .get(
-        `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs?name=&location&limit=20&page=1&sortby=updated_at&orderby=desc`,
-      )
-      .then(res => {
-        this.setState({
-          data: res.data.data.result,
-          isLoading: false,
-          status: '',
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({
-          isLoading: false,
-        });
+  //   await axios
+  //     .get(
+  //       `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs?name=&location&limit=20&page=1&sortby=updated_at&orderby=desc`,
+  //     )
+  //     .then(res => {
+  //       this.setState({
+  //         data: res.data.data.result,
+  //         isLoading: false,
+  //         status: '',
+  //       });
+  //     })
+  //     .catch(err => {
+  //       console.log(err);
+  //       this.setState({
+  //         isLoading: false,
+  //       });
+  //     });
+  // }
+
+  getJob = async (
+    search = '',
+    location = '',
+    limit = 20,
+    page = 1,
+    sortby = 'j.updated_at',
+    orderby = 'desc',
+  ) => {
+    try {
+      const result = await this.props.dispatch(
+        getJobRedux(search, location, limit, page, sortby, orderby),
+      );
+
+      const dataResult = result.value.result.data.data;
+
+      this.setState({
+        data: dataResult.result,
+        // totalPage: dataResult.infoPage.maxPage,
+        // infoPage: dataResult.infoPage
+        isLoading: false,
       });
-  }
+    } catch (err) {
+      console.log(err);
+      this.setState({
+        data: [],
+      }); // TypeError: failed to fetch
+    }
+  };
 
   async searchJob(event) {
     this.setState({
       isLoading: true,
     });
-    await axios
-      .get(
-        `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs?name=${event.nativeEvent.text}&location=${this.state.location}&limit=100&page=1&sortby=updated_at&orderby=desc`,
-      )
-      .then(res => {
-        console.log(res.data.data.result);
-        this.setState({
-          data: res.data.data.result,
-          isLoading: false,
-          status: '',
-        });
-      })
-      .catch(err => {
-        this.setState({
-          isLoading: false,
-          status: '404',
-        });
-        console.log(err.message);
+
+    const {location, limit, page, sortby, orderby} = this.state;
+    let search = event.nativeEvent.text;
+
+    try {
+      const result = await this.props.dispatch(
+        getJobRedux(search, location, limit, page, sortby, orderby),
+      );
+
+      const dataResult = result.value.result.data.data;
+
+      this.setState({
+        data: dataResult.result,
+        // totalPage: dataResult.infoPage.maxPage,
+        // infoPage: dataResult.infoPage
+        isLoading: false,
       });
+    } catch (err) {
+      console.log(err);
+      this.setState({
+        data: [],
+        isLoading: false,
+      }); // TypeError: failed to fetch
+    }
+    // await axios
+    //   .get(
+    //     `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs?name=${event.nativeEvent.text}&location=${this.state.location}&limit=100&page=1&sortby=updated_at&orderby=desc`,
+    //   )
+    //   .then(res => {
+    //     console.log(res.data.data.result);
+    //     this.setState({
+    //       data: res.data.data.result,
+    //       isLoading: false,
+    //       status: '',
+    //     });
+    //   })
+    //   .catch(err => {
+    //     this.setState({
+    //       isLoading: false,
+    //       status: '404',
+    //     });
+    //     console.log(err.message);
+    //   });
   }
 
   async searchLocation(event) {
     this.setState({
       isLoading: true,
     });
-    await axios
-      .get(
-        `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs?name=${this.state.search}&location=${event.nativeEvent.text}&limit=100&page=1&sortby=updated_at&orderby=desc`,
-      )
-      .then(res => {
-        // console.log(res.data.data.result);
-        this.setState({
-          data: res.data.data.result,
-          isLoading: false,
-        });
-      })
-      .catch(err => {
-        this.setState({
-          isLoading: false,
-          status: '404',
-        });
-        console.log(err);
+
+    const {search, limit, page, sortby, orderby} = this.state;
+    let location = event.nativeEvent.text;
+
+    try {
+      const result = await this.props.dispatch(
+        getJobRedux(search, location, limit, page, sortby, orderby),
+      );
+
+      const dataResult = result.value.result.data.data;
+
+      this.setState({
+        data: dataResult.result,
+        // totalPage: dataResult.infoPage.maxPage,
+        // infoPage: dataResult.infoPage
+        isLoading: false,
       });
+    } catch (err) {
+      console.log(err);
+      this.setState({
+        data: [],
+        isLoading: false,
+      }); // TypeError: failed to fetch
+    }
+    // await axios
+    //   .get(
+    //     `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs?name=${this.state.search}&location=${event.nativeEvent.text}&limit=100&page=1&sortby=updated_at&orderby=desc`,
+    //   )
+    //   .then(res => {
+    //     // console.log(res.data.data.result);
+    //     this.setState({
+    //       data: res.data.data.result,
+    //       isLoading: false,
+    //     });
+    //   })
+    //   .catch(err => {
+    //     this.setState({
+    //       isLoading: false,
+    //       status: '404',
+    //     });
+    //     console.log(err);
+    //   });
   }
 
   async deleteJob() {
@@ -164,7 +243,9 @@ class Jobs extends Component {
       isLoadingDelete: true,
     });
     await axios
-      .delete(`http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs/${this.state.deleteJobId}`)
+      .delete(
+        `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs/${this.state.deleteJobId}`,
+      )
       .then(res => {
         // console.log(res);
 
@@ -231,8 +312,6 @@ class Jobs extends Component {
 
   _renderListJob = () => {
     if (this.state.isLoading) {
-      const array = [1, 2, 3, 4];
-
       return (
         <Loader
           height={140}
@@ -248,7 +327,7 @@ class Jobs extends Component {
           }}
         />
       );
-    } else if (this.state.status === '404') {
+    } else if (this.props.job.status == '404') {
       return (
         <View style={{alignItems: 'center', marginTop: 20}}>
           <Text>Pekerjaan Tidak ditemukan</Text>
@@ -591,4 +670,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Jobs;
+const mapStateToProps = state => ({
+  job: state.job,
+});
+
+export default connect(mapStateToProps)(Jobs);

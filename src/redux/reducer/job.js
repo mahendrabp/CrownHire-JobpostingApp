@@ -6,6 +6,7 @@ const initialState = {
   totalPage: '',
   infoPage: '',
   message: '',
+  status: '',
 };
 
 const job = (state = initialState, action) => {
@@ -17,14 +18,17 @@ const job = (state = initialState, action) => {
         isLoading: true,
       };
     case 'GET_JOB_REJECTED':
+      console.log(action.payload.response.status);
       return {
         ...state,
         isLoading: false,
         isError: true,
+        status: action.payload.response.status,
         job: [],
       };
     case 'GET_JOB_FULFILLED':
       const {location, limit, page, sortby} = action.payload;
+      console.log(action.payload.result.status);
       return {
         ...state,
         isloading: false,
@@ -38,6 +42,7 @@ const job = (state = initialState, action) => {
         orderby: action.payload.orderby,
         totalPage: action.payload.result.data.data.infoPage.maxPage,
         infoPage: action.payload.result.data.data.infoPage,
+        status: action.payload.result.status,
       };
 
     case 'ADD_JOB_PENDING':

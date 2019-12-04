@@ -16,7 +16,7 @@
   - [Clone Repo](#Clone-Repo)
   - [Install Depedencies](#Install-Depedencies)
   - [Setup Environment](#Setup-Environment)
-  - [Run server development](#Run-server-development)
+    <!-- - [Run server development](#Run-server-development) -->
   - [Build For Production](#Build-For-Production)
 - [Dependencies](#Dependencies)
 - [Screenshot](#Screenshot)
