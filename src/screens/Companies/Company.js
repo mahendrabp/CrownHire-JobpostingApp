@@ -22,6 +22,8 @@ import {
   Body,
 } from 'native-base';
 import Modal from 'react-native-modal';
+import {getCompanyRedux} from '../../redux/action/company';
+import {connect} from 'react-redux';
 
 import notFoundImage from '../../assets/404notfound.png';
 
@@ -39,19 +41,25 @@ class Company extends Component {
   }
 
   async getCompany() {
-    const url = 'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/companies';
-    await axios
-      .get(url)
-      .then(result => {
-        const dataCompany = result.data.data;
-        // console.log(result.data.data);
-        this.setState({
-          companies: dataCompany,
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    try {
+      this.props.dispatch(getCompanyRedux());
+    } catch (error) {
+      console.log(error);
+    }
+    // const url =
+    //   'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/companies';
+    // await axios
+    //   .get(url)
+    //   .then(result => {
+    //     const dataCompany = result.data.data;
+    //     // console.log(result.data.data);
+    //     this.setState({
+    //       companies: dataCompany,
+    //     });
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
   }
 
   render() {
@@ -59,7 +67,7 @@ class Company extends Component {
       <>
         <ScrollView>
           <Card style={{marginVertical: 10}}>
-            {this.state.companies.map(v => (
+            {this.props.company.company.map(v => (
               <TouchableOpacity
                 onPress={() =>
                   this.props.navigation.navigate('DetailCompanyScreen', v)
@@ -156,4 +164,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Company;
+const mapStateToProps = state => ({
+  company: state.company,
+});
+
+export default connect(mapStateToProps)(Company);
