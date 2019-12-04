@@ -119,12 +119,12 @@ List of depedencies using in this project
 
 ### Screenshot
 
-![image](https://i.ibb.co/rZsRbBv/Screenshot-20191204-134818-Crown-Hire.jpg)
-![image](https://i.ibb.co/hVnyxrx/Screenshot-20191204-133613-Crown-Hire.jpg)
-![image](https://i.ibb.co/Fx0TvPR/Screenshot-20191204-133906-Crown-Hire.jpg)
-![image](https://i.ibb.co/nfqVG9j/Screenshot-20191204-133809-Crown-Hire.jpg)
-![image](https://i.ibb.co/V2M2cNW/Screenshot-20191204-133747-Crown-Hire.jpg)
-![image](https://i.ibb.co/qmDHx4q/Screenshot-20191204-133920-Crown-Hire.jpg)
+![image](https://i.ibb.co/rZsRbBv/Screenshot-20191204-134818-Crown-Hire.jpg){:height="50%" width="50%"}
+![image](https://i.ibb.co/hVnyxrx/Screenshot-20191204-133613-Crown-Hire.jpg){:height="50%" width="50%"}
+![image](https://i.ibb.co/Fx0TvPR/Screenshot-20191204-133906-Crown-Hire.jpg){:height="50%" width="50%"}
+![image](https://i.ibb.co/nfqVG9j/Screenshot-20191204-133809-Crown-Hire.jpg){:height="50%" width="50%"}
+![image](https://i.ibb.co/V2M2cNW/Screenshot-20191204-133747-Crown-Hire.jpg){:height="50%" width="50%"}
+![image](https://i.ibb.co/qmDHx4q/Screenshot-20191204-133920-Crown-Hire.jpg){:height="50%" width="50%"}
 
 ## License and Support
 
