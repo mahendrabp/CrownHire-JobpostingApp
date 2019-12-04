@@ -112,35 +112,59 @@ class AddJobScreen extends Component {
 
     // console.log(name, description, category_id);
 
-    await axios
-      .post(
-        `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs/`,
-        formData,
-      )
-      .then(res => {
-        // console.log(res.data.data);
-        if (res.data.status !== 200) {
-          this.setState({
-            errors: res.data.errors,
-            // isLoadingBtn: false,
-          });
-        }
-
-        if (res.data.status === 200) {
-          this.props.navigation.navigate('Jobs', {
-            data: res.data.data,
-            // isEdit: true,
-            // data: [data, res.data.data],
-          });
-          ToastAndroid.show('berhasil menambah pekerjaan', ToastAndroid.LONG);
-        }
-      })
-      .catch(err => {
+    try {
+      await this.props.dispatch(addJobRedux(formData));
+      if (this.props.job.status !== 200) {
         this.setState({
-          isLoadingBtn: false,
+          // errors: res.data.errors,
+          // isLoadingBtn: false,
         });
-        console.log(err);
+      }
+
+      if (this.props.job.status === 200) {
+        this.props.navigation.navigate('Jobs', {
+          data: this.props.job.job,
+          // isEdit: true,
+          // data: [data, res.data.data],
+        });
+        ToastAndroid.show('berhasil menambah pekerjaan', ToastAndroid.LONG);
+      }
+    } catch (error) {
+      this.setState({
+        isLoadingBtn: false,
       });
+      console.log(error);
+    }
+
+    // await axios
+    //   .post(
+    //     `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs/`,
+    //     formData,
+    //   )
+    //   .then(res => {
+    //     // console.log(res.data.data);
+    //     if (res.data.status !== 200) {
+    //       this.setState({
+    //         errors: res.data.errors,
+    //         // isLoadingBtn: false,
+    //       });
+    //     }
+
+    //     if (res.data.status === 200) {
+    //       this.props.navigation.navigate('Jobs', {
+    //         data: res.data.data,
+    //         // isEdit: true,
+    //         // data: [data, res.data.data],
+    //       });
+    //       ToastAndroid.show('berhasil menambah pekerjaan', ToastAndroid.LONG);
+    //     }
+    //   })
+    //   .catch(err => {
+    //     this.setState({
+    //       isLoadingBtn: false,
+    //     });
+    //     console.log(err);
+    //   });
   }
 
   async dataCategory() {

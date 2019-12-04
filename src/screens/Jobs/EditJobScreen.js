@@ -11,6 +11,10 @@ import {Text, Input, Select, Button} from 'react-native-ui-kitten';
 import {WaveIndicator} from 'react-native-indicators';
 import axios from 'axios';
 import rupiah from 'rupiah-format';
+import {connect} from 'react-redux';
+import {updateJobRedux} from '../../redux/action/job';
+import {getCategoryRedux} from '../../redux/action/category';
+import {getCompanyRedux} from '../../redux/action/company';
 
 class EditJobScreen extends Component {
   constructor(props) {
@@ -113,57 +117,89 @@ class EditJobScreen extends Component {
     formData.append('company_id', company_id);
 
     // console.log(name, description, category_id);
-
-    await axios
-      .patch(`http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs/${this.state.id}`, formData)
-
-      .then(res => {
-        // console.log(res.data.status);
-        if (res.data.status !== 200) {
-          this.setState({
-            // errors: res.data.errors,
-            // isLoadingBtn: false,
-          });
-        }
-
-        if (res.data.status === 200) {
-          this.props.navigation.navigate('Jobs', {
-            data: res.data.data,
-            edited: true,
-          });
-          ToastAndroid.show('berhasil mengedit', ToastAndroid.LONG);
-          // this.setState({
-          //   isLoadingBtn: false,
-          // });
-        }
-      })
-      .catch(err => {
+    try {
+      await this.props.dispatch(updateJobRedux(this.state.id, formData));
+      if (this.props.job.status !== 200) {
         this.setState({
-          isLoadingBtn: false,
+          // errors: res.data.errors,
+          // isLoadingBtn: false,
         });
-        console.log(err);
+      }
+
+      if (this.props.job.status === 200) {
+        this.props.navigation.navigate('Jobs', {
+          data: this.props.job.job,
+          // isEdit: true,
+          // data: [data, res.data.data],
+        });
+        ToastAndroid.show('berhasil mengedit', ToastAndroid.LONG);
+      }
+    } catch (error) {
+      this.setState({
+        isLoadingBtn: false,
       });
+      console.log(error);
+    }
+    // await axios
+    //   .patch(
+    //     `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs/${this.state.id}`,
+    //     formData,
+    //   )
+
+    //   .then(res => {
+    //     // console.log(res.data.status);
+    //     if (res.data.status !== 200) {
+    //       this.setState({
+    //         // errors: res.data.errors,
+    //         // isLoadingBtn: false,
+    //       });
+    //     }
+
+    //     if (res.data.status === 200) {
+    //       this.props.navigation.navigate('Jobs', {
+    //         data: res.data.data,
+    //         edited: true,
+    //       });
+    //       ToastAndroid.show('berhasil mengedit', ToastAndroid.LONG);
+    //       // this.setState({
+    //       //   isLoadingBtn: false,
+    //       // });
+    //     }
+    //   })
+    //   .catch(err => {
+    //     this.setState({
+    //       isLoadingBtn: false,
+    //     });
+    //     console.log(err);
+    //   });
   }
 
   async dataCategory() {
-    const url = 'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/categories';
-    await axios
-      .get(url)
-      .then(result => {
-        const dataCategory = result.data.data;
-        // console.log(result.data.data);
-        this.setState({
-          categories: dataCategory,
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    try {
+      await this.props.dispatch(getCategoryRedux());
+      // this.setState({
+
+      // });
+    } catch (error) {}
+    // const url =
+    //   'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/categories';
+    // await axios
+    //   .get(url)
+    //   .then(result => {
+    //     const dataCategory = result.data.data;
+    //     // console.log(result.data.data);
+    //     this.setState({
+    //       categories: dataCategory,
+    //     });
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
   }
 
   async currCategory() {
-    const current_category = this.state.categories.map(
-      category => category.id == navigation.getParam('category_id'),
+    const current_category = this.props.category.category.map(
+      category => category.id == this.props.navigation.getParam('category_id'),
     );
 
     await this.setState({
@@ -182,19 +218,26 @@ class EditJobScreen extends Component {
   }
 
   async dataCompany() {
-    const url = 'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/companies';
-    await axios
-      .get(url)
-      .then(result => {
-        const dataCompany = result.data.data;
-        console.log(result.data.data);
-        this.setState({
-          companies: dataCompany,
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    try {
+      await this.props.dispatch(getCompanyRedux());
+      // this.setState({
+
+      // });
+    } catch (error) {}
+    // const url =
+    //   'http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/companies';
+    // await axios
+    //   .get(url)
+    //   .then(result => {
+    //     const dataCompany = result.data.data;
+    //     console.log(result.data.data);
+    //     this.setState({
+    //       companies: dataCompany,
+    //     });
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
   }
 
   async handleSelectCompany(data) {
@@ -251,7 +294,7 @@ class EditJobScreen extends Component {
                 onValueChange={(itemValue, itemIndex) =>
                   this.setState({category_id: itemValue})
                 }>
-                {this.state.categories.map(v => (
+                {this.props.category.category.map(v => (
                   <Picker.Item
                     label={v.category}
                     value={v.id.toString()}
@@ -268,7 +311,7 @@ class EditJobScreen extends Component {
                 onValueChange={(itemValue, itemIndex) =>
                   this.setState({company_id: itemValue})
                 }>
-                {this.state.companies.map(v => (
+                {this.props.company.company.map(v => (
                   <Picker.Item
                     label={v.name}
                     value={v.id.toString()}
@@ -354,4 +397,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditJobScreen;
+const mapStateToProps = state => ({
+  job: state.job,
+  category: state.category,
+  company: state.company,
+});
+
+export default connect(mapStateToProps)(EditJobScreen);

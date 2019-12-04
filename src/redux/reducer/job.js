@@ -62,6 +62,7 @@ const job = (state = initialState, action) => {
         ...state,
         isLoading: false,
         isError: false,
+        status: action.payload.data.status,
         message: action.payload.data.message,
         job: [...state.job, action.payload.data.data],
       };
@@ -82,6 +83,7 @@ const job = (state = initialState, action) => {
         ...state,
         isLoading: false,
         isError: false,
+        status: action.payload.data.status,
         message: action.payload.data.message,
         job: state.job.map(i =>
           i.id === action.id ? action.payload.data.data : i,
