@@ -107,6 +107,7 @@ const job = (state = initialState, action) => {
         ...state,
         isLoading: false,
         isError: false,
+        status: action.payload.data.status,
         message: action.payload.data.message,
         job: state.job.filter(i => i.id !== action.id),
       };

@@ -25,7 +25,7 @@ import {NavigationEvents} from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Facebook as Loader} from 'react-content-loader/native';
 import {connect} from 'react-redux';
-import {getJobRedux} from '../../redux/action/job';
+import {getJobRedux, deleteJobRedux} from '../../redux/action/job';
 
 class Jobs extends Component {
   constructor(props) {
@@ -242,30 +242,26 @@ class Jobs extends Component {
     this.setState({
       isLoadingDelete: true,
     });
-    await axios
-      .delete(
-        `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs/${this.state.deleteJobId}`,
-      )
-      .then(res => {
-        // console.log(res);
 
-        if (res.data.status == 200) {
-          const jobIndex = this.state.data
-            .map(val => {
-              return val.id;
-            })
-            .indexOf(this.state.deleteJobId);
+    try {
+      await this.props.dispatch(deleteJobRedux(this.state.deleteJobId));
 
-          let data = this.state.data;
-          data.splice(jobIndex, 1);
+      this.getJob();
+      if (this.props.job.status == 200) {
+        // const jobIndex = this.state.data
+        //   .map(val => {
+        //     return val.id;
+        //   })
+        //   .indexOf(this.state.deleteJobId);
 
-          this.setState({
-            data,
-          });
-          ToastAndroid.show('Pekerjaan telah di hapus', ToastAndroid.LONG);
-        }
+        // let data = this.state.data;
+        // data.splice(jobIndex, 1);
 
-        if (res.data.status != 200) {
+        // this.setState({
+        //   data,
+        // });
+        ToastAndroid.show('Pekerjaan telah di hapus', ToastAndroid.LONG);
+        if (this.props.job.status != 200) {
           ToastAndroid.show('Ada yang salah', ToastAndroid.LONG);
         }
 
@@ -274,14 +270,55 @@ class Jobs extends Component {
         });
 
         this.toggleModalDelete();
-      })
-      .catch(err => {
-        console.log(err.message);
-        this.setState({
-          isLoadingDelete: false,
-        });
-        this.toggleModalDelete();
+      }
+    } catch (error) {
+      console.log(error.message);
+      this.setState({
+        isLoadingDelete: false,
       });
+      this.toggleModalDelete();
+    }
+
+    // await axios
+    //   .delete(
+    //     `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs/${this.state.deleteJobId}`,
+    //   )
+    //   .then(res => {
+    //     // console.log(res);
+
+    //     if (res.data.status == 200) {
+    //       const jobIndex = this.state.data
+    //         .map(val => {
+    //           return val.id;
+    //         })
+    //         .indexOf(this.state.deleteJobId);
+
+    //       let data = this.state.data;
+    //       data.splice(jobIndex, 1);
+
+    //       this.setState({
+    //         data,
+    //       });
+    //       ToastAndroid.show('Pekerjaan telah di hapus', ToastAndroid.LONG);
+    //     }
+
+    //     if (res.data.status != 200) {
+    //       ToastAndroid.show('Ada yang salah', ToastAndroid.LONG);
+    //     }
+
+    //     this.setState({
+    //       isLoadingDelete: false,
+    //     });
+
+    //     this.toggleModalDelete();
+    //   })
+    //   .catch(err => {
+    //     console.log(err.message);
+    //     this.setState({
+    //       isLoadingDelete: false,
+    //     });
+    //     this.toggleModalDelete();
+    //   });
   }
 
   toggleModalDelete(id) {
