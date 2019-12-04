@@ -27,6 +27,10 @@ import moment from 'moment';
 import 'moment-timezone';
 import 'moment/locale/id';
 
+import {connect} from 'react-redux';
+import {getJobRedux} from '../redux/action/job';
+import {getNewsRedux} from '../redux/action/news';
+
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -50,23 +54,35 @@ class HomeScreen extends Component {
       isLoading: true,
     });
 
-    await axios
-      .get(
-        `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs?name=&location&limit=5&page=1&sortby=updated_at&orderby=desc`,
-      )
-      .then(res => {
-        this.setState({
-          data: res.data.data.result,
-          isLoading: false,
-          status: '',
-        });
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({
-          isLoading: false,
-        });
+    try {
+      await this.props.dispatch(getJobRedux());
+      this.setState({
+        isLoading: false,
+        status: '',
       });
+    } catch (error) {
+      this.setState({
+        isLoading: false,
+      });
+    }
+
+    // await axios
+    //   .get(
+    //     `http://ec2-100-24-23-28.compute-1.amazonaws.com:8001/api/v1/jobs?name=&location&limit=5&page=1&sortby=updated_at&orderby=desc`,
+    //   )
+    //   .then(res => {
+    //     this.setState({
+    //       data: res.data.data.result,
+    //       isLoading: false,
+    //       status: '',
+    //     });
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     this.setState({
+    //       isLoading: false,
+    //     });
+    //   });
   }
 
   closeControlPanel = () => {
@@ -106,24 +122,36 @@ class HomeScreen extends Component {
       isLoading: true,
     });
 
-    await axios
-      .get(
-        `https://newsapi.org/v2/top-headlines?country=id&category=business&apiKey=5d292d5fca5f446f89a2a279aec88376`,
-      )
-      .then(res => {
-        this.setState({
-          news: res.data.articles,
-          isLoading: false,
-          status: '',
-        });
-        // console.log(res.data.articles);
-      })
-      .catch(err => {
-        console.log(err);
-        this.setState({
-          isLoading: true,
-        });
+    try {
+      await this.props.dispatch(getNewsRedux());
+      this.setState({
+        isLoading: false,
+        status: '',
       });
+    } catch (error) {
+      this.setState({
+        isLoading: false,
+      });
+    }
+
+    // await axios
+    //   .get(
+    //     `https://newsapi.org/v2/top-headlines?country=id&category=business&apiKey=5d292d5fca5f446f89a2a279aec88376`,
+    //   )
+    //   .then(res => {
+    //     this.setState({
+    //       news: res.data.articles,
+    //       isLoading: false,
+    //       status: '',
+    //     });
+    //     // console.log(res.data.articles);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     this.setState({
+    //       isLoading: true,
+    //     });
+    //   });
   };
 
   _renderItem({item, index}) {
@@ -269,7 +297,7 @@ class HomeScreen extends Component {
                   <ScrollView
                     horizontal={true}
                     style={{backgroundColor: '#fff'}}>
-                    {this.state.data.map(v => (
+                    {this.props.job.job.map(v => (
                       <TouchableOpacity
                         key={v.id}
                         onPress={() =>
@@ -337,7 +365,7 @@ class HomeScreen extends Component {
                       right: 0,
                       bottom: 0,
                     }}>
-                    {this.state.news.map((v, index) => {
+                    {this.props.news.news.map((v, index) => {
                       console.log(this.state.isLoading);
                       return this.state.isLoading == true ? (
                         <Card>
@@ -454,4 +482,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+const mapStateToProps = state => ({
+  job: state.job,
+  news: state.news,
+});
+
+export default connect(mapStateToProps)(HomeScreen);
