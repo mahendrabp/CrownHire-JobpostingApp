@@ -4,7 +4,7 @@
 [![Code](https://camo.githubusercontent.com/65f7d034f575d55d73f27883473847130e1ead2e/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f436f64652532305374796c652d5374616e646172642d79656c6c6f772e737667)](https://standardjs.com) -->
 
 <p align="center">
-  <img width="600" height="300" src="https://i-verve.com/wp-content/themes/iverve-child/images/react-native/react-native-solution-expertise.png">
+  <img src="https://i.ibb.co/K5nmbty/9ca8c1aa-3785-4df0-a4a0-318bda8a4104-200x200.png">
 </p>
 
 ## Table Of Contents
@@ -119,12 +119,18 @@ List of depedencies using in this project
 
 ### Screenshot
 
-![image](https://i.ibb.co/rZsRbBv/Screenshot-20191204-134818-Crown-Hire.jpg){:height="50%" width="50%"}
-![image](https://i.ibb.co/hVnyxrx/Screenshot-20191204-133613-Crown-Hire.jpg){:height="50%" width="50%"}
-![image](https://i.ibb.co/Fx0TvPR/Screenshot-20191204-133906-Crown-Hire.jpg){:height="50%" width="50%"}
-![image](https://i.ibb.co/nfqVG9j/Screenshot-20191204-133809-Crown-Hire.jpg){:height="50%" width="50%"}
-![image](https://i.ibb.co/V2M2cNW/Screenshot-20191204-133747-Crown-Hire.jpg){:height="50%" width="50%"}
-![image](https://i.ibb.co/qmDHx4q/Screenshot-20191204-133920-Crown-Hire.jpg){:height="50%" width="50%"}
+<!-- ![image](https://i.ibb.co/rZsRbBv/Screenshot-20191204-134818-Crown-Hire.jpg)
+![image](https://i.ibb.co/hVnyxrx/Screenshot-20191204-133613-Crown-Hire.jpg)
+![image](https://i.ibb.co/Fx0TvPR/Screenshot-20191204-133906-Crown-Hire.jpg)
+![image](https://i.ibb.co/nfqVG9j/Screenshot-20191204-133809-Crown-Hire.jpg)
+![image](https://i.ibb.co/V2M2cNW/Screenshot-20191204-133747-Crown-Hire.jpg)
+![image](https://i.ibb.co/qmDHx4q/Screenshot-20191204-133920-Crown-Hire.jpg) -->
+
+<img src="https://i.ibb.co/rZsRbBv/Screenshot-20191204-134818-Crown-Hire.jpg" alt="login" width="30%" height="30%" hspace="20"><img src="https://i.ibb.co/hVnyxrx/Screenshot-20191204-133613-Crown-Hire.jpg" width="30%" height="30%" alt="home"><img src="https://i.ibb.co/Fx0TvPR/Screenshot-20191204-133906-Crown-Hire.jpg" width="30%" height="30%" hspace="20" alt="job">
+
+<br>
+
+<img src="https://i.ibb.co/nfqVG9j/Screenshot-20191204-133809-Crown-Hire.jpg" width="30%" height="30%" hspace="20" alt="edit"><img src="https://i.ibb.co/V2M2cNW/Screenshot-20191204-133747-Crown-Hire.jpg" width="30%" height="30%" alt="tambah"><img src="https://i.ibb.co/qmDHx4q/Screenshot-20191204-133920-Crown-Hire.jpg" width="30%" height="30%" hspace="20" alt="perusahaan">
 
 ## License and Support
 
